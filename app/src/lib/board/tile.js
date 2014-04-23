@@ -74,12 +74,11 @@ define(function(require) {
   Tile.prototype.wiggle = function() {
     var mod       = this._mod;
     var surface   = this._surface;
-    var spring    = {method: 'spring', period: 250, dampingRatio: 0.2};
     var direction = this._parity ? 1 : -1;
     mod.setTransform(Transform.rotateZ(direction * Math.PI/3));
     surface.addClass('wigglin');
     // Callback doesn't fire all of the time.
-    mod.setTransform(Transform.translate(0, 0, 0), spring, function() {
+    mod.setTransform(Transform.translate(0, 0, 0), {method: 'spring', period: 250, dampingRatio: 0.2}, function() {
       surface.removeClass('wigglin');
     });
     return this;

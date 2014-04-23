@@ -46,7 +46,8 @@ html {
   font-size: 24px;
 }
 
-.modal.button:active {
+.modal.button:active,
+.modal.button.clicked {
   background-color: black;
   color: white;
 }

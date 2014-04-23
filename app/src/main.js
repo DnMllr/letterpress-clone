@@ -19,7 +19,7 @@ define(function(require) {
   // animation helper
 
   function timeout(milliseconds) {
-    return new Promise(function(resolve) {
+    return new window.Promise(function(resolve) {
       setTimeout(resolve, milliseconds);
     });
   }
@@ -45,7 +45,11 @@ define(function(require) {
       }).then(function() {
         return timeout(1000);
       }).then(function() {
+        document.querySelector('.modal.button').className = 'modal button clicked';
+        return timeout(100);
+      }).then(function() {
         app.modalView.hide();
+        document.querySelector('.modal.button').className = 'modal button';
         app.board.wiggleByColor([-1, -2]);
       });
     },
