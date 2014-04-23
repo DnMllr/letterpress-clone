@@ -18,15 +18,20 @@ define(function(require) {
 
   // animation helper
 
-  function timeout(milliseconds) {
+  function wait(milliseconds) {
     return new window.Promise(function(resolve) {
       setTimeout(resolve, milliseconds);
     });
   }
 
-  //Animation 2
+  //Animations
 
-  var animation2 = {
+  var animation = [{
+    // TODO: impliment animations 1 and 3.
+    build    : function() {},
+    run      : function() {},
+    teardown : function() {}
+  }, {
     colors: {
       '1'  : [[0, 4], [3, 4]],
       '-1' : [[0, 0], [0, 2], [0,3], [1, 1], [1, 3], [1, 4], [3, 0], [3, 3]],
@@ -40,13 +45,12 @@ define(function(require) {
       }
     },
     run : function() {
-      timeout(500).then(function() {
+      wait(500).then(function() {
         app.modalView.display('message1');
-      }).then(function() {
-        return timeout(1000);
+        return wait(1000);
       }).then(function() {
         document.querySelector('.modal.button').className = 'modal button clicked';
-        return timeout(100);
+        return wait(100);
       }).then(function() {
         app.modalView.hide();
         document.querySelector('.modal.button').className = 'modal button';
@@ -60,12 +64,17 @@ define(function(require) {
         });
       }
     }
-  };
+  }, {
+    // TODO: impliment animations 1 and 3.
+    build    : function() {},
+    run      : function() {},
+    teardown : function() {}
+  }];
 
-  animation2.build();
-  animation2.run();
+  animation[1].build();
+  animation[1].run();
 
-  window.animation2 = animation2;
-  window.app        = app;
+  window.animation = animation;
+  window.app       = app;
 
 });

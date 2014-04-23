@@ -4,8 +4,6 @@ html {
 }
 
 .tile {
-  -webkit-transition: -webkit-box-shadow 0.2s;
-  -webkit-transition: box-shadow 0.2s;
   -webkit-transition: background-color 0.2s;
   font-weight: bold;
 }

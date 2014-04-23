@@ -7,7 +7,7 @@ define(function(require) {
   //Helpers
 
   function _getRandomChar() {
-    var type = Math.random() > 0.80 ? 'vowels' : 'consonants';
+    var type  = Math.random() > 0.80 ? 'vowels' : 'consonants';
     var index = Math.floor(Chars[type].length * Math.random());
     return Chars[type][index];
   }
@@ -15,13 +15,6 @@ define(function(require) {
   function _populate(b) {
     b.tiles = [];
     for (var i = 0 ; i < 25 ; i++) b.tiles.push(new Tile(_getRandomChar(), i));
-    // TODO: FOR DEVELOPMENT ONLY, REMOVE.
-    b.tiles.forEach(function(tile) {
-      tile._eventInput.on('click', function() {
-        tile.setColor(((tile.getColor() + 3) % 5) - 2);
-      });
-    });
-    // END TODO.
     b._layout.sequenceFrom(b.tiles);
   }
 

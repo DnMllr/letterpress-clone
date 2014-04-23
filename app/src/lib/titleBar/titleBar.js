@@ -38,10 +38,20 @@ define(function(require) {
   MenuBar.prototype.constructor = ContainerSurface;
 
   MenuBar.prototype.setState = function(s) {
+    // TODO finish this:
     switch(s) {
       case 0:
         this._left.setContent('');
         this._right.setContent('');
+        break;
+      case 1:
+        this._left.setContent('<i class="icon-back"></i>');
+        this._right.setContent('<i class="icon-burger"></i>');
+        break;
+      case 2:
+        this._left.setContent('Cancel');
+        this._right.setContent('<div class="submit-pill">Submit</div>');
+        break;
     }
   };
 
