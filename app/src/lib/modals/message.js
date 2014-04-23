@@ -1,8 +1,10 @@
 define(function(require) {
 
-  var Surface          = require('famous/core/Surface');
-  var View             = require('famous/core/View');
-  var StateModifier    = require('famous/modifiers/StateModifier');
+  var Surface       = require('famous/core/Surface');
+  var View          = require('famous/core/View');
+  var StateModifier = require('famous/modifiers/StateModifier');
+  var Transform     = require('famous/core/Transform');
+  var Easing        = require('famous/transitions/Easing');
 
   //helpers
 
@@ -37,6 +39,13 @@ define(function(require) {
 
   Message.prototype             = Object.create(View.prototype);
   Message.prototype.constructor = Message;
+
+  Message.prototype.turn = function() {
+    var mod = this._mod;
+    mod.setTransform(Transform.rotateZ(-23 * Math.PI / 12), {curve: Easing.inQuad, duration: 300}, function() {
+      mod.setTransform(Transform.translate(0, 0, 0));
+    });
+  };
 
   return Message;
 

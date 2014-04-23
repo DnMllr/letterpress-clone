@@ -52,7 +52,7 @@ define(function(require) {
         document.querySelector('.modal.button').className = 'modal button clicked';
         return wait(100);
       }).then(function() {
-        app.modalView.hide();
+        app.modalView.away();
         document.querySelector('.modal.button').className = 'modal button';
         app.board.wiggleByColor([-1, -2]);
       });

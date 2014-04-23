@@ -20,6 +20,7 @@ define(function(require) {
     this.messages = {
       message1: new Message('Your Turn', '<strong> You </strong> Played <strong>Slippers</strong>, </br> <strong> Robert </strong> Played <strong> Pressing </strong>', ['OK'])
     };
+    this.shown = '';
   }
 
   ModalView.prototype             = Object.create(Lightbox.prototype);
@@ -27,6 +28,13 @@ define(function(require) {
 
   ModalView.prototype.display = function(key) {
     this.show(this.messages[key]);
+    this.shown = key;
+  };
+
+  ModalView.prototype.away = function() {
+    if (this.shown != null) this.messages[this.shown].turn();
+    this.shown = '';
+    this.hide();
   };
 
   return ModalView;
