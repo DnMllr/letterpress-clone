@@ -1,0 +1,11 @@
+{
+  "generator-famous": {
+    "projectName": "letterpress",
+    "projectDesc": "Seed project to get started with Famo.us",
+    "authorLogin": "DnMllr",
+    "author": {
+      "name": "DnMllr",
+      "email": "yajnavalkya@cox.net"
+    }
+  }
+}
