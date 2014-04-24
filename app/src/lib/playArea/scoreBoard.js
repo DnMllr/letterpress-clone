@@ -1,6 +1,6 @@
 define(function(require) {
 
-  var ContainerSurface = require('famous/surfaces/ContainerSurface');
+  var View             = require('famous/core/View');
   var Surface          = require('famous/core/Surface');
   var StateModifier    = require('famous/modifiers/StateModifier');
   var Transform        = require('famous/core/Transform');
@@ -20,15 +20,13 @@ define(function(require) {
   //Class
 
   function ScoreBoard(url1, url2) {
-    ContainerSurface.call(this, {
-      size: [350, 150]
-    });
+    View.call(this);
     this._currentPlayer = 0;
     this.position       = 'home';
     this._home          = new PlayerView(url1, 0);
     this._away          = new PlayerView(url2, 1);
     this._indicator     = new Surface({
-      size       : [100, 100],
+      size       : [true, true],
       content    : '<i class="icon-downarrow"></i>',
       classes    : ['indicator'],
       properties : {
@@ -38,16 +36,16 @@ define(function(require) {
       }
     });
     this._modH = new StateModifier({
-      origin    : [0.5, 0.5],
-      transform : Transform.translate(-40, 15, 0)
+      origin    : [0.5, 0],
+      transform : Transform.translate(-40, 0, 0)
     });
     this._modA = new StateModifier({
-      origin    : [0.5, 0.5],
-      transform : Transform.translate(40, 15, 0)
+      origin    : [0.5, 0],
+      transform : Transform.translate(40, 0, 0)
     });
     this._modI = new StateModifier({
       origin: [0.5, 0],
-      transform: Transform.translate(-40, 95, 0)
+      transform: Transform.translate(-63, 80, 0)
     });
     this._spring = {
       method       : 'spring',
@@ -57,7 +55,7 @@ define(function(require) {
     _init(this);
   }
 
-  ScoreBoard.prototype             = Object.create(ContainerSurface.prototype);
+  ScoreBoard.prototype             = Object.create(View.prototype);
   ScoreBoard.prototype.constructor = ScoreBoard;
 
   ScoreBoard.prototype.overlap = function() {

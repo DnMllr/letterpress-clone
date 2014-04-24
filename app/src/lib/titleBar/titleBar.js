@@ -1,14 +1,12 @@
 define(function(require) {
-  var Surface          = require('famous/core/Surface');
-  var StateModifier    = require('famous/modifiers/StateModifier');
-  var ContainerSurface = require('famous/surfaces/ContainerSurface');
+  var Surface       = require('famous/core/Surface');
+  var StateModifier = require('famous/modifiers/StateModifier');
+  var View          = require('famous/core/View');
 
   function MenuBar() {
-    ContainerSurface.call(this, {
-      size: [350, 60]
-    });
+    View.call(this);
     this._left = new Surface({
-      size       : [100, 60],
+      size       : [100, 30],
       content    : '<i class="icon-back"></i>',
       properties : {
         fontSize : '24px',
@@ -16,7 +14,7 @@ define(function(require) {
       }
     });
     this._right = new Surface({
-      size       : [100, 60],
+      size       : [100, 30],
       content    : '<i class="icon-burger"></i>',
       properties : {
         textAlign : 'right',
@@ -27,15 +25,15 @@ define(function(require) {
     this._mod = new StateModifier();
     var mod   = this.add(this._mod);
     mod.add(new StateModifier({
-      origin: [0, 0]
+      origin: [0, 0.5]
     })).add(this._left);
     mod.add(new StateModifier({
-      origin: [1, 0]
+      origin: [1, 0.5]
     })).add(this._right);
   }
 
-  MenuBar.prototype             = Object.create(ContainerSurface.prototype);
-  MenuBar.prototype.constructor = ContainerSurface;
+  MenuBar.prototype             = Object.create(View.prototype);
+  MenuBar.prototype.constructor = MenuBar;
 
   MenuBar.prototype.setState = function(s) {
     // TODO finish this:

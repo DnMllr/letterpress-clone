@@ -1,8 +1,8 @@
 define(function(require) {
-  var GridLayout       = require('famous/views/GridLayout');
-  var ContainerSurface = require('famous/surfaces/ContainerSurface');
-  var Tile             = require('./tile');
-  var Chars            = require('./charDict');
+  var GridLayout = require('famous/views/GridLayout');
+  var View       = require('famous/core/View');
+  var Tile       = require('./tile');
+  var Chars      = require('./charDict');
 
   //Helpers
 
@@ -34,9 +34,7 @@ define(function(require) {
   // Class
 
   function Board() {
-    ContainerSurface.call(this, {
-      size: [350, 350]
-    });
+    View.call(this);
     this._layout = new GridLayout({
       dimensions: [5,5]
     });
@@ -45,7 +43,7 @@ define(function(require) {
     _init(this);
   }
 
-  Board.prototype             = Object.create(ContainerSurface.prototype);
+  Board.prototype             = Object.create(View.prototype);
   Board.prototype.constructor = Board;
 
   Board.prototype.tileByPosition = function(x, y) {

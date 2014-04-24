@@ -40,6 +40,15 @@ define(function(require) {
   Message.prototype             = Object.create(View.prototype);
   Message.prototype.constructor = Message;
 
+  Message.prototype.updateMessage = function(message) {
+    var content = this._background.getContent();
+    var start   = content.indexOf('<div class="modal message">') + 28
+    var end     = content.slice(start).indexOf('</div>') + start;
+    var start   = content.slice(0, start);
+    var end     = content.slice(end);
+    this._background.setContent(start + message + end);
+  };
+
   Message.prototype.turn = function() {
     var mod = this._mod;
     mod.setTransform(Transform.rotateZ(-23 * Math.PI / 12), {curve: Easing.inQuad, duration: 300}, function() {

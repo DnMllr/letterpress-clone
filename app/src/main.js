@@ -2,9 +2,9 @@
 define(function(require) {
   'use strict';
   // import dependencies
-  var Engine           = require('famous/core/Engine');
-  var Modifier         = require('famous/core/Modifier');
-  var App              = require('./lib/app');
+  var Engine   = require('famous/core/Engine');
+  var Modifier = require('famous/core/Modifier');
+  var App      = require('./lib/app');
 
   // create the main context
   var mainContext = Engine.createContext();
