@@ -70,9 +70,9 @@ define(function(require) {
   ScoreBoard.prototype.home = function() {
     this.position = 'home';
     this._modH.halt();
-    this._modH.setTransform(Transform.translate(-40, 15, 0), this._spring);
+    this._modH.setTransform(Transform.translate(-40, 0, 0), this._spring);
     this._modA.halt();
-    this._modA.setTransform(Transform.translate(40, 15, 0), this._spring);
+    this._modA.setTransform(Transform.translate(40, 0, 0), this._spring);
     this._modI.setOpacity(1, {curve: 'linear', duration: 200});
   };
 

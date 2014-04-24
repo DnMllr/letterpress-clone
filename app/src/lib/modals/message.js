@@ -1,29 +1,32 @@
 define(function(require) {
 
-  var Surface       = require('famous/core/Surface');
-  var View          = require('famous/core/View');
-  var StateModifier = require('famous/modifiers/StateModifier');
-  var Transform     = require('famous/core/Transform');
-  var Easing        = require('famous/transitions/Easing');
+  var Surface        = require('famous/core/Surface');
+  var View           = require('famous/core/View');
+  var Modifier       = require('famous/core/Modifier');
+  var Transform      = require('famous/core/Transform');
+  var Easing         = require('famous/transitions/Easing');
+  var Transitionable = require('famous/transitions/Transitionable');
 
   //helpers
 
-  function generateButtons(buttons) {
+  function generateButtons(buttons, mouseDownOn) {
     var html = '';
-    buttons.forEach(function(button) {
-      html += ('<div class="modal button">' + button + '</div>');
+    if (mouseDownOn !== 0) mouseDownOn = mouseDownOn || -1;
+    buttons.forEach(function(button, i) {
+      html += i === mouseDownOn ? ('<div class="modal button clicked">' + button + '</div>') : ('<div class="modal button">' + button + '</div>');
     });
     return html;
   }
 
-  //class
-
-  function Message(heading, message, buttons) {
-    View.call(this);
-    this._mod = new StateModifier({
-      origin: [0.5, 0.5]
+  function _init(message) {
+    message._mod.transformFrom(function() {
+      return Transform.rotateZ(message._turner.get());
     });
-    this._background = new Surface({
+    message.add(message._mod).add(message._surface);
+  }
+
+  function createSurface(heading, message, buttons) {
+    return new Surface({
       content    : (heading !== '' ?  '<div class="modal heading">' + heading + '</div>' : '')
         + '<div class="modal message">' + message + '</div>' + generateButtons(buttons),
       size       : [true, true],
@@ -34,27 +37,46 @@ define(function(require) {
         backgroundColor : 'white'
       }
     });
-    this.add(this._mod).add(this._background);
+  }
+
+  //class
+
+  function Message(heading, message, buttons) {
+    View.call(this);
+    this.heading  = heading;
+    this.message  = message;
+    this.buttons  = buttons;
+    this._turner  = new Transitionable(0);
+    this._surface = createSurface.apply(this, arguments);
+    this._mod     = new Modifier({
+      origin: [0.5, 0.5]
+    });
+    _init(this);
   }
 
   Message.prototype             = Object.create(View.prototype);
   Message.prototype.constructor = Message;
 
-  Message.prototype.updateMessage = function(message) {
-    var content = this._background.getContent();
-    var start   = content.indexOf('<div class="modal message">') + 28
-    var end     = content.slice(start).indexOf('</div>') + start;
-    var start   = content.slice(0, start);
-    var end     = content.slice(end);
-    this._background.setContent(start + message + end);
-  };
-
   Message.prototype.turn = function() {
-    var mod = this._mod;
-    mod.setTransform(Transform.rotateZ(-23 * Math.PI / 12), {curve: Easing.inQuad, duration: 300}, function() {
-      mod.setTransform(Transform.translate(0, 0, 0));
+    var self = this;
+    this._turner.set(Math.PI / 12, {curve: Easing.inQuad, duration: 300}, function() {
+      self._turner.set(0, {});
     });
   };
+
+  Message.prototype.rerenderHTML = function() {
+    var self = this;
+    this._surface.setContent((self.heading !== '' ?  '<div class="modal heading">' + self.heading + '</div>' : '')
+      + '<div class="modal message">' + self.message + '</div>' + generateButtons(self.buttons));
+  };
+
+  Message.prototype.mouseDown = function(buttonNumber) {
+    var self = this;
+    this._surface.setContent((self.heading !== '' ?  '<div class="modal heading">' + self.heading + '</div>' : '')
+      + '<div class="modal message">' + self.message + '</div>' + generateButtons(self.buttons, buttonNumber));
+  };
+
+
 
   return Message;
 

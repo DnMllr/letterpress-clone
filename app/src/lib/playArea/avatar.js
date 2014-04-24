@@ -28,10 +28,6 @@ define(function(require) {
   Avatar.prototype             = Object.create(ContainerSurface.prototype);
   Avatar.prototype.constructor = Avatar;
 
-  Avatar.prototype.kenBurns = function() {
-    this._mod.setTransform(Transform.translate(Math.random() * 10 - 5, Math.random() * 10 - 5, Math.random() * 100), {curve: 'linear', duration: 1000});
-  };
-
   return Avatar;
 
 });

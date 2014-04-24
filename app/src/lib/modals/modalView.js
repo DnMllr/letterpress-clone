@@ -31,6 +31,10 @@ define(function(require) {
     this.shown = key;
   };
 
+  ModalView.prototype.getShown = function() {
+    return this.messages[this.shown];
+  }
+
   ModalView.prototype.away = function() {
     if (this.shown != null) this.messages[this.shown].turn();
     this.shown = '';

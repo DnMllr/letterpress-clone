@@ -2,7 +2,7 @@ define(function(require) {
 
   var Surface          = require('famous/core/Surface');
   var View             = require('famous/core/View');
-  var StateModifier    = require('famous/modifiers/StateModifier');
+  var Modifier         = require('famous/core/Modifier');
   var Transform        = require('famous/core/Transform');
   var Transitionable   = require('famous/transitions/Transitionable');
   var SpringTransition = require('famous/transitions/SpringTransition');
@@ -10,20 +10,17 @@ define(function(require) {
 
   //Helpers
 
-  function _init(v) {
-    v._surface.pipe(v);
-    v.setColor(0);
-    v.add(v._mod).add(v._surface);
+  function _init(tile) {
+    tile._surface.pipe(tile);
+    tile.setColor(0);
+    tile._mod.transformFrom(function() {
+      return Transform.rotateZ(tile._wiggler.get());
+    });
+    tile.add(tile._mod).add(tile._surface);
   }
 
-  //Class
-
-  function Tile(letter, index) {
-    View.call(this);
-    this._mod     = new StateModifier({
-      origin: [0.5, 0.5]
-    });
-    this._surface = new Surface({
+  function createSurface(letter) {
+    return new Surface({
       content : '<p>' + letter + '</p>',
       classes : ['tile'],
       properties: {
@@ -31,9 +28,20 @@ define(function(require) {
         fontSize  : 24 + 'px'
       }
     });
-    this.letter  = letter;
-    this.color   = 0;
-    this._parity = index % 2;
+  }
+
+  //Class
+
+  function Tile(letter, index) {
+    View.call(this);
+    this.letter   = letter;
+    this.color    = 0;
+    this._parity  = index % 2;
+    this._surface = createSurface(letter);
+    this._wiggler = new Transitionable(0);
+    this._mod     = new Modifier({
+      origin: [0.5, 0.5]
+    });
 
     _init(this);
   }
@@ -72,15 +80,23 @@ define(function(require) {
   };
 
   Tile.prototype.wiggle = function() {
-    var mod       = this._mod;
-    var surface   = this._surface;
-    var direction = this._parity ? 1 : -1;
-    mod.setTransform(Transform.rotateZ(direction * Math.PI/3));
-    surface.addClass('wigglin');
-    // Callback doesn't fire all of the time.
-    mod.setTransform(Transform.translate(0, 0, 0), {method: 'spring', period: 250, dampingRatio: 0.2}, function() {
-      surface.removeClass('wigglin');
+    var self           = this;
+    var direction      = this._parity ? 1 : -1;
+    if (this._timingOut) clearTimeout(this._timingOut);
+    this._wiggler.halt();
+    this._wiggler.set(direction * Math.PI/3);
+    this._surface.addClass('wigglin');
+    this._wiggler.set(0, {
+      method: 'spring',
+      period: 250,
+      dampingRatio: 0.2
     });
+    this._timingOut = setTimeout(function() {
+      self._wiggler.halt();
+      self._wiggler.set(0);
+      self._surface.removeClass('wigglin');
+      delete self._timingOut;
+    }, 1000);
     return this;
   };
 

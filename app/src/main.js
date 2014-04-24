@@ -11,10 +11,13 @@ define(function(require) {
 
   // your app here
   var app = new App();
+  app.newGame();
 
-  mainContext.add(new Modifier({
+  var node = mainContext.add(new Modifier({
     origin: [0.5, 0.5]
-  })).add(app);
+  }))
+  node.add(app.games[0]);
+  node.add(app.modalView);
 
   // animation helper
 
@@ -40,7 +43,7 @@ define(function(require) {
     build: function() {
       for (var color in this.colors) {
         this.colors[color].forEach(function(pair) {
-          app.board.tileByPosition.apply(app.board, pair).setColor(parseInt(color));
+          app.games[0].board.tileByPosition.apply(app.games[0].board, pair).setColor(parseInt(color));
         });
       }
     },
@@ -49,18 +52,18 @@ define(function(require) {
         app.modalView.display('message1');
         return wait(1000);
       }).then(function() {
-        document.querySelector('.modal.button').className = 'modal button clicked';
+        app.modalView.getShown().mouseDown(0); // A suboptimal strategy for faking the click.
         return wait(100);
       }).then(function() {
+        app.modalView.getShown().rerenderHTML(); // A suboptimal strategy for faking the click.
         app.modalView.away();
-        document.querySelector('.modal.button').className = 'modal button';
-        app.board.wiggleByColor([-1, -2]);
+        app.games[0].board.wiggleByColor([-1, -2]);
       });
     },
     teardown: function() {
       for (var color in this.colors) {
         this.colors[color].forEach(function(pair) {
-          app.board.tileByPosition.apply(app.board, pair).setColor(0);
+          app.games[0].board.tileByPosition.apply(app.games[0].board, pair).setColor(0);
         });
       }
     }
