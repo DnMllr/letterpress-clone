@@ -15,11 +15,11 @@ define(function(require) {
 
   var node = mainContext.add(new Modifier({
     origin: [0.5, 0.5]
-  }))
+  }));
   node.add(app.games[0]);
   node.add(app.modalView);
 
-  // animation helper
+  // animation helpers
 
   function wait(milliseconds) {
     return new window.Promise(function(resolve) {

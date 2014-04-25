@@ -9,6 +9,27 @@ define(function(require) {
   var SpringTransition = require('famous/transitions/SpringTransition');
   Transitionable.registerMethod('spring', SpringTransition);
 
+  //Class Constructor
+
+  function ScoreBoard(url1, url2) {
+    View.call(this);
+    this._currentPlayer = 1;
+    this.position       = 'home';
+    this._indicator     = createIndicator();
+    this._spring        = {
+      method       : 'spring',
+      period       : 200,
+      dampingRatio : 0.3
+    };
+    _createPlayers.apply(this, arguments);
+    _applyTransitionables(this);
+    _applyMods(this);
+    _init(this);
+  }
+
+  ScoreBoard.prototype             = Object.create(View.prototype);
+  ScoreBoard.prototype.constructor = ScoreBoard;
+
   //Helpers
 
   function _init(scoreBoard) {
@@ -23,7 +44,7 @@ define(function(require) {
     });
     scoreBoard._modI.opacityFrom(function() {
       return (scoreBoard._translateY.get() + 30) / 30;
-    })
+    });
     scoreBoard.add(scoreBoard._modH).add(scoreBoard._home);
     scoreBoard.add(scoreBoard._modA).add(scoreBoard._away);
     scoreBoard.add(scoreBoard._modI).add(scoreBoard._indicator);
@@ -65,26 +86,7 @@ define(function(require) {
     this._away = new PlayerView(url2, 1);
   }
 
-  //Class
-
-  function ScoreBoard(url1, url2) {
-    View.call(this);
-    this._currentPlayer = 1;
-    this.position       = 'home';
-    this._indicator     = createIndicator();
-    this._spring        = {
-      method       : 'spring',
-      period       : 200,
-      dampingRatio : 0.3
-    };
-    _createPlayers.apply(this, arguments);
-    _applyTransitionables(this);
-    _applyMods(this);
-    _init(this);
-  }
-
-  ScoreBoard.prototype             = Object.create(View.prototype);
-  ScoreBoard.prototype.constructor = ScoreBoard;
+  // Prototypal Methods
 
   ScoreBoard.prototype.overlap = function() {
     this.position = 'overlap';

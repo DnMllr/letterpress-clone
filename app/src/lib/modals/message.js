@@ -7,7 +7,25 @@ define(function(require) {
   var Easing         = require('famous/transitions/Easing');
   var Transitionable = require('famous/transitions/Transitionable');
 
-  //helpers
+  // Class Constructor
+
+  function Message(heading, message, buttons) {
+    View.call(this);
+    this.heading  = heading;
+    this.message  = message;
+    this.buttons  = buttons;
+    this._turner  = new Transitionable(0);
+    this._surface = createSurface(heading, message, buttons);
+    this._mod     = new Modifier({
+      origin: [0.5, 0.5]
+    });
+    _init(this);
+  }
+
+  Message.prototype             = Object.create(View.prototype);
+  Message.prototype.constructor = Message;
+
+  // Helpers
 
   function generateButtons(buttons, mouseDownOn) {
     var html = '';
@@ -39,23 +57,7 @@ define(function(require) {
     });
   }
 
-  //class
-
-  function Message(heading, message, buttons) {
-    View.call(this);
-    this.heading  = heading;
-    this.message  = message;
-    this.buttons  = buttons;
-    this._turner  = new Transitionable(0);
-    this._surface = createSurface.apply(this, arguments);
-    this._mod     = new Modifier({
-      origin: [0.5, 0.5]
-    });
-    _init(this);
-  }
-
-  Message.prototype             = Object.create(View.prototype);
-  Message.prototype.constructor = Message;
+  // Prototypal Methods
 
   Message.prototype.turn = function() {
     var self = this;
@@ -75,8 +77,6 @@ define(function(require) {
     this._surface.setContent((self.heading !== '' ?  '<div class="modal heading">' + self.heading + '</div>' : '')
       + '<div class="modal message">' + self.message + '</div>' + generateButtons(self.buttons, buttonNumber));
   };
-
-
 
   return Message;
 

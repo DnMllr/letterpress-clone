@@ -5,6 +5,8 @@ define(function(require) {
   var Easing    = require('famous/transitions/Easing');
   var Message   = require('./message');
 
+  // Class Constructor
+
   function ModalView() {
     // TODO: fix this hack, figure out how the lightbox is supposed to work.
     Lightbox.call(this, {
@@ -26,6 +28,8 @@ define(function(require) {
   ModalView.prototype             = Object.create(Lightbox.prototype);
   ModalView.prototype.constructor = ModalView;
 
+  // Prototypal Methods
+
   ModalView.prototype.display = function(key) {
     this.show(this.messages[key]);
     this.shown = key;
@@ -33,7 +37,7 @@ define(function(require) {
 
   ModalView.prototype.getShown = function() {
     return this.messages[this.shown];
-  }
+  };
 
   ModalView.prototype.away = function() {
     if (this.shown != null) this.messages[this.shown].turn();

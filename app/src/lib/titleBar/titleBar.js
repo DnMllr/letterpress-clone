@@ -3,6 +3,8 @@ define(function(require) {
   var StateModifier = require('famous/modifiers/StateModifier');
   var View          = require('famous/core/View');
 
+  // Class Constructor
+
   function MenuBar() {
     View.call(this);
     this._left = new Surface({
@@ -34,6 +36,8 @@ define(function(require) {
 
   MenuBar.prototype             = Object.create(View.prototype);
   MenuBar.prototype.constructor = MenuBar;
+
+  // Prototypal Methods
 
   MenuBar.prototype.setState = function(s) {
     // TODO finish this:

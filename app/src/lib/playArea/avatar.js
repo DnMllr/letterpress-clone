@@ -5,6 +5,8 @@ define(function(require) {
   var Transform        = require('famous/core/Transform');
   var ImageSurface     = require('famous/surfaces/ImageSurface');
 
+  // Class Constructor
+
   function Avatar(avatarUrl, index) {
     ContainerSurface.call(this, {
       size       : [75, 75],

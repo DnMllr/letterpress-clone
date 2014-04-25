@@ -8,6 +8,24 @@ define(function(require) {
   var SpringTransition = require('famous/transitions/SpringTransition');
   Transitionable.registerMethod('spring', SpringTransition);
 
+  //Class
+
+  function Tile(letter, index) {
+    View.call(this);
+    this.letter   = letter;
+    this.color    = 0;
+    this._parity  = index % 2;
+    this._surface = createSurface(letter);
+    this._wiggler = new Transitionable(0);
+    this._mod     = new Modifier({
+      origin: [0.5, 0.5]
+    });
+    _init(this);
+  }
+
+  Tile.prototype             = Object.create(View.prototype);
+  Tile.prototype.constructor = Tile;
+
   //Helpers
 
   function _init(tile) {
@@ -30,24 +48,7 @@ define(function(require) {
     });
   }
 
-  //Class
-
-  function Tile(letter, index) {
-    View.call(this);
-    this.letter   = letter;
-    this.color    = 0;
-    this._parity  = index % 2;
-    this._surface = createSurface(letter);
-    this._wiggler = new Transitionable(0);
-    this._mod     = new Modifier({
-      origin: [0.5, 0.5]
-    });
-
-    _init(this);
-  }
-
-  Tile.prototype             = Object.create(View.prototype);
-  Tile.prototype.constructor = Tile;
+  // Prototypal Methods
 
   Tile.prototype.getColor = function() {
     return this.color;

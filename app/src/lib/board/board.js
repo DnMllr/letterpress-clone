@@ -4,7 +4,22 @@ define(function(require) {
   var Tile       = require('./tile');
   var Chars      = require('./charDict');
 
-  //Helpers
+  // Class Constructor
+
+  function Board() {
+    View.call(this);
+    this._layout = new GridLayout({
+      dimensions: [5,5]
+    });
+    this.tiles = [];
+
+    _init(this);
+  }
+
+  Board.prototype             = Object.create(View.prototype);
+  Board.prototype.constructor = Board;
+
+  // Helpers
 
   function _getRandomChar() {
     var type  = Math.random() > 0.80 ? 'vowels' : 'consonants';
@@ -31,24 +46,11 @@ define(function(require) {
     return {}.toString.call(obj).slice(8, -1);
   }
 
-  // Class
-
-  function Board() {
-    View.call(this);
-    this._layout = new GridLayout({
-      dimensions: [5,5]
-    });
-    this.tiles = [];
-
-    _init(this);
-  }
-
-  Board.prototype             = Object.create(View.prototype);
-  Board.prototype.constructor = Board;
-
   Board.prototype.tileByPosition = function(x, y) {
     return this.tiles[x * 5 + y];
   };
+
+  // Prototypal Methods
 
   Board.prototype.tilesByColor = function(c) {
     var color;
