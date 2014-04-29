@@ -15,9 +15,17 @@ define(function(require) {
     this.letter   = letter;
     this.color    = 0;
     this._parity  = index % 2;
+    this.x        = index % 5;
+    this.y        = Math.floor(index / 5);
     this._surface = createSurface(letter);
     this._wiggler = new Transitionable(0);
-    this._mod     = new Modifier({
+    this._pos     = [new Transitionable(0), new Transitionable(0)];
+    this._width   = new Transitionable(window.innerWidth / 5);
+    this._size    = new Modifier();
+    this._turn    = new Modifier({
+      origin: [0.5, 0.5]
+    });
+    this._position = new Modifier({
       origin: [0.5, 0.5]
     });
     _init(this);
@@ -31,10 +39,16 @@ define(function(require) {
   function _init(tile) {
     tile._surface.pipe(tile);
     tile.setColor(0);
-    tile._mod.transformFrom(function() {
+    tile._turn.transformFrom(function() {
       return Transform.rotateZ(tile._wiggler.get());
     });
-    tile.add(tile._mod).add(tile._surface);
+    tile._position.transformFrom(function() {
+      return Transform.translate(tile._pos[0].get(), tile._pos[1].get());
+    });
+    tile._position.sizeFrom(function() {
+      return [tile._width.get(), window.innerWidth / 5];
+    });
+    tile.add(tile._position).add(tile._turn).add(tile._surface);
   }
 
   function createSurface(letter) {
@@ -81,22 +95,22 @@ define(function(require) {
   };
 
   Tile.prototype.wiggle = function() {
-    var self           = this;
-    var direction      = this._parity ? 1 : -1;
-    if (this._timingOut) clearTimeout(this._timingOut);
-    this._wiggler.halt();
-    this._wiggler.set(direction * Math.PI/3);
-    this._surface.addClass('wigglin');
-    this._wiggler.set(0, {
+    var wiggler   = this._wiggler;
+    var surface   = this._surface;
+    var direction = this._parity ? 1 : -1;
+    clearTimeout(this._timingOut);
+    wiggler.halt();
+    wiggler.set(direction * Math.PI/3);
+    surface.addClass('wigglin');
+    wiggler.set(0, {
       method: 'spring',
       period: 250,
       dampingRatio: 0.2
     });
     this._timingOut = setTimeout(function() {
-      self._wiggler.halt();
-      self._wiggler.set(0);
-      self._surface.removeClass('wigglin');
-      delete self._timingOut;
+      wiggler.halt();
+      wiggler.set(0);
+      surface.removeClass('wigglin');
     }, 1000);
     return this;
   };
@@ -109,6 +123,24 @@ define(function(require) {
   Tile.prototype.showLetter = function() {
     this._surface.setContent('<p>' + this.letter + '</p>');
     return this;
+  };
+
+  Tile.prototype.goTo = function(x, y, options) {
+    options = options || {
+      method: 'spring',
+      period: 250,
+      dampingRatio: 0.4
+    };
+    this._pos[0].set(x, options);
+    this._pos[1].set(y, options);
+  };
+
+  Tile.prototype.resize = function(size) {
+    this._width.set(size);
+  };
+
+  Tile.prototype.getPos = function() {
+    return [this.x, this.y];
   };
 
   return Tile;

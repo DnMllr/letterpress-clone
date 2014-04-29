@@ -60,22 +60,24 @@ define(function(require) {
   // Prototypal Methods
 
   Message.prototype.turn = function() {
-    var self = this;
+    var turner = this._turner;
     this._turner.set(Math.PI / 12, {curve: Easing.inQuad, duration: 300}, function() {
-      self._turner.set(0, {});
+      turner.set(0, {});
     });
   };
 
   Message.prototype.rerenderHTML = function() {
-    var self = this;
-    this._surface.setContent((self.heading !== '' ?  '<div class="modal heading">' + self.heading + '</div>' : '')
-      + '<div class="modal message">' + self.message + '</div>' + generateButtons(self.buttons));
+    var content = (this.heading !== '' ?  '<div class="modal heading">' + this.heading + '</div>' : '')
+      + '<div class="modal message">' + this.message + '</div>' + generateButtons(this.buttons);
+    this._surface.setContent(content);
+    return this;
   };
 
   Message.prototype.mouseDown = function(buttonNumber) {
-    var self = this;
-    this._surface.setContent((self.heading !== '' ?  '<div class="modal heading">' + self.heading + '</div>' : '')
-      + '<div class="modal message">' + self.message + '</div>' + generateButtons(self.buttons, buttonNumber));
+    var content = (this.heading !== '' ?  '<div class="modal heading">' + this.heading + '</div>' : '')
+      + '<div class="modal message">' + this.message + '</div>' + generateButtons(this.buttons, buttonNumber);
+    this._surface.setContent(content);
+    return this;
   };
 
   return Message;

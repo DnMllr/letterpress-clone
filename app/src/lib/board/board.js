@@ -1,8 +1,9 @@
 define(function(require) {
-  var GridLayout = require('famous/views/GridLayout');
-  var View       = require('famous/core/View');
-  var Tile       = require('./tile');
-  var Chars      = require('./charDict');
+  var GridLayout  = require('famous/views/GridLayout');
+  var View        = require('famous/core/View');
+  var Tile        = require('./tile');
+  var Chars       = require('./charDict');
+  var WordBuilder = require('./wordBuilder');
 
   // Class Constructor
 
@@ -11,6 +12,7 @@ define(function(require) {
     this._layout = new GridLayout({
       dimensions: [5,5]
     });
+    this.wordBuilder = new WordBuilder();
     this.tiles = [];
 
     _init(this);
@@ -30,6 +32,13 @@ define(function(require) {
   function _populate(b) {
     b.tiles = [];
     for (var i = 0 ; i < 25 ; i++) b.tiles.push(new Tile(_getRandomChar(), i));
+    b.tiles.forEach(function(tile) {
+      tile._eventInput.on('click', function() {
+        var index = b.wordBuilder.indexOf(tile);
+        if (index !== -1) b.wordBuilder.remove(index);
+        else b.wordBuilder.push(tile);
+      });
+    });
     b._layout.sequenceFrom(b.tiles);
   }
 
@@ -46,11 +55,11 @@ define(function(require) {
     return {}.toString.call(obj).slice(8, -1);
   }
 
-  Board.prototype.tileByPosition = function(x, y) {
-    return this.tiles[x * 5 + y];
-  };
-
   // Prototypal Methods
+
+  Board.prototype.tileByPosition = function(x, y) {
+    return this.tiles[y * 5 + x];
+  };
 
   Board.prototype.tilesByColor = function(c) {
     var color;

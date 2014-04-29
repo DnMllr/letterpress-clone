@@ -1,5 +1,6 @@
 define(function(require) {
   var Surface       = require('famous/core/Surface');
+  var Transform     = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
   var View          = require('famous/core/View');
 
@@ -27,10 +28,12 @@ define(function(require) {
     this._mod = new StateModifier();
     var mod   = this.add(this._mod);
     mod.add(new StateModifier({
+      transform: Transform.translate(15, 0, 0),
       origin: [0, 0.5]
     })).add(this._left);
     mod.add(new StateModifier({
-      origin: [1, 0.5]
+      transform : Transform.translate(-15, 0, 0),
+      origin    : [1, 0.5]
     })).add(this._right);
   }
 
