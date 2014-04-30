@@ -25,6 +25,7 @@ define(function(require) {
     [
 
       _createTitleBars,
+      _wireEvents,
       _createScene
 
     ].forEach(function(step) {
@@ -39,6 +40,12 @@ define(function(require) {
       bar.setState(i);
       this.bars.push(bar);
     }
+  }
+
+  function _wireEvents() {
+    this.bars[2].on('submit', function() {
+      this._eventOutput.emit('submit');
+    }.bind(this));
   }
 
   function _createScene() {

@@ -108,8 +108,7 @@ define(function(require) {
             var tally = 0;
             var total = xs.length + ys.length;
             neighbors.forEach(function(neighbor) {
-              var possibleTile = grid[neighbor[1]][neighbor[0]];
-              if (possibleTile) tally++;
+              if (grid[neighbor[1]][neighbor[0]]) tally++;
             });
             if (tally === total) surrounded[tile.getPos().join('')] = tile;
           }
@@ -154,7 +153,12 @@ define(function(require) {
   };
 
   Board.prototype.acceptWord = function(color) {
-    return findSurrounded(buildGrid(this.wordBuilder.tiles));
+    this.wordBuilder.tiles.forEach(function(tile) {
+      tile.setColor(color);
+    });
+    var surrounded = findSurrounded(buildGrid(this.tilesByColor([color, color * 2])));
+    for (var key in surrounded) surrounded[key].setColor(color * 2);
+    this.wordBuilder.removeAll();
   };
 
   return Board;

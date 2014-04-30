@@ -21,6 +21,7 @@ define(function(require) {
     [
 
       _applySurfaces,
+      _wireEvents,
       _createScene
 
     ].forEach(function(step) {
@@ -31,6 +32,12 @@ define(function(require) {
   function _applySurfaces() {
     this._left  = _createBack();
     this._right = _createBurger();
+  }
+
+  function _wireEvents() {
+    this._right.on('click', function() {
+      if (this._state === 2) this._eventOutput.emit('submit');
+    }.bind(this))
   }
 
   function _createScene() {
@@ -78,14 +85,17 @@ define(function(require) {
       case 0:
         this._left.setContent('');
         this._right.setContent('');
+        this._state = 0;
         break;
       case 1:
         this._left.setContent('<i class="icon-back"></i>');
         this._right.setContent('<i class="icon-burger"></i>');
+        this._state = 1;
         break;
       case 2:
         this._left.setContent('Cancel');
         this._right.setContent('<div class="submit-pill">Submit</div>');
+        this._state = 2;
         break;
     }
   };

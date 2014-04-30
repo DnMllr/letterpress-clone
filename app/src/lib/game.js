@@ -14,13 +14,14 @@ define(function(require) {
 
   function Game() {
     View.call(this);
-    this._size    = _createSize();
-    this._layout  = _createLayout();
-    this.IO       = new EventHandler();
-    this._sizer   = new Transitionable(1);
-    this.board    = new Board();
-    this.menu     = new TitleController();
-    this.playArea = new ScoreBoard('styles/img/guy1.jpg', 'styles/img/guy2.jpg');
+    this._size         = _createSize();
+    this._layout       = _createLayout();
+    this.IO            = new EventHandler();
+    this._sizer        = new Transitionable(1);
+    this.board         = new Board();
+    this.menu          = new TitleController();
+    this.playArea      = new ScoreBoard('styles/img/guy1.jpg', 'styles/img/guy2.jpg');
+    this.currentPlayer = 1;
 
     _init(this);
   }
@@ -51,13 +52,19 @@ define(function(require) {
   function _wireEvents() {
     this.IO.subscribe(this.board.wordBuilder.IO);
 
+    this.menu.on('submit', function() {
+      this.board.acceptWord(this.currentPlayer === 1 ? 1 : -1);
+      this.nextTurn();
+    }.bind(this));
+
     this.IO.on('WB activated', function() {
       this.playArea.overlap();
+      this.menu.show(2);
     }.bind(this));
 
     this.IO.on('WB deactivated', function() {
       this.playArea.home();
-      this.playArea.setPlayer();
+      this.menu.show(1);
     }.bind(this));
   }
 
@@ -101,6 +108,12 @@ define(function(require) {
       footerSize: window.innerWidth
     });
   };
+
+  Game.prototype.nextTurn = function() {
+    this.currentPlayer = this.currentPlayer % 2; 
+    this.currentPlayer++
+    this.playArea.setPlayer(this.currentPlayer);
+  }
 
   return Game;
 
