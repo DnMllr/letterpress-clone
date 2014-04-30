@@ -14,6 +14,7 @@ define(function(require) {
     View.call(this);
     this.lightbox   = _createLightBox();
     this.background = _createSurface();
+    
     _init(this);
   }
 
@@ -22,18 +23,32 @@ define(function(require) {
 
   // Helpers
 
-  function _init(modalController) {
-    modalController.messages = {};
-    modalController.messages.message1 = {
+  function _init(ModalController) {
+    [
+
+      _createMessages,
+      _createScene
+
+    ].forEach(function(step) {
+      step.apply(ModalController)
+    });
+  }
+
+  function _createMessages() {
+    this.messages = {};
+    this.messages.message1 = {
       modal : new Message('Your Turn', '<strong> You </strong> Played <strong>Slippers</strong>, </br> <strong> Robert </strong> Played <strong> Pressing </strong>', ['OK']),
       dark  : false
     };
-    modalController.messages.spinner = {
+    this.messages.spinner = {
       modal : new Spinner(),
       dark  : true
     };
-    modalController.add(modalController.lightbox);
-    modalController.add(modalController.background);
+  }
+
+  function _createScene() {
+    this.add(this.lightbox);
+    this.add(this.background);
   }
 
   function _createLightBox() {

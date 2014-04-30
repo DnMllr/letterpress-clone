@@ -15,10 +15,9 @@ define(function(require) {
     this.message  = message;
     this.buttons  = buttons;
     this._turner  = new Transitionable(0);
-    this._surface = _createSurface(heading, message, buttons);
     this._mod     = _createMod();
 
-    _init(this);
+    _init(this, arguments);
   }
 
   Message.prototype             = Object.create(View.prototype);
@@ -35,17 +34,22 @@ define(function(require) {
     return html;
   }
 
-  function _init(message) {
-    message._mod.transformFrom(function() {
-      return Transform.rotateZ(message._turner.get());
+  function _init(Message, args) {
+    [
+
+      _applySurface,
+      _wireTransitionables,
+      _createScene
+
+    ].forEach(function(step) {
+      step.apply(Message, args)
     });
-    message.add(message._mod).add(message._surface);
   }
 
-  function _createSurface(heading, message, buttons) {
-    return new Surface({
-      content    : (heading !== '' ?  '<div class="modal heading">' + heading + '</div>' : '')
-        + '<div class="modal message">' + message + '</div>' + generateButtons(buttons),
+  function _applySurface() {
+    this._surface = new Surface({
+      content    : (this.heading !== '' ?  '<div class="modal heading">' + this.heading + '</div>' : '')
+        + '<div class="modal message">' + this.message + '</div>' + generateButtons(this.buttons),
       size       : [window.innerWidth - 50, 150],
       properties : {
         borderRadius    : '12px',
@@ -55,6 +59,16 @@ define(function(require) {
         zIndex          : 2
       }
     });
+  }
+
+  function _wireTransitionables() {
+    this._mod.transformFrom(function() {
+      return Transform.rotateZ(this._turner.get());
+    }.bind(this));
+  }
+
+  function _createScene() {
+    this.add(this._mod).add(this._surface);
   }
 
   function _createMod() {

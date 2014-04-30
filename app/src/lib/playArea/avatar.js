@@ -7,7 +7,7 @@ define(function(require) {
   // Class Constructor
 
   function Avatar(avatarUrl, index) {
-    ContainerSurface.call(this, {
+    ContainerSurface.call(this,{
       size       : [75, 75],
       classes    : ['player-view'],
       properties : {
@@ -19,7 +19,7 @@ define(function(require) {
     this._mod   = _createMod();
     this._image = _createImg(avatarUrl);
 
-    _init(this);
+    _createScene(this);
   }
 
   Avatar.prototype             = Object.create(ContainerSurface.prototype);
@@ -27,7 +27,7 @@ define(function(require) {
 
   // Helpers
 
-  function _init(avatar) {
+  function _createScene(avatar) {
     avatar.add(avatar._mod).add(avatar._image);
   }
 

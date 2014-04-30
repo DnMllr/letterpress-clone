@@ -9,16 +9,57 @@ define(function(require) {
 
   function Spinner() {
     View.call(this);
-    this._background = _createSurface('background');
-    this._content    = _createSurface('content');
-    this._backMod    = _createMod();
-    this._contMod    = _createMod();
-    this._ticker     = new Transitionable(0);
-    this._turner     = new Transitionable(0);
+
     _init(this);
   }
 
+  Spinner.prototype             = Object.create(View.prototype);
+  Spinner.prototype.constructor = Spinner;
+
   // Helpers
+
+  function _init(spinner) {
+    [
+
+      _createSurfaces,
+      _applyTransitionables,
+      _applyMods,
+      _wireTransitionables,
+      _createScene
+
+    ].forEach(function(step) {
+      step.apply(spinner);
+    });
+  }
+
+  function _createSurfaces() {
+    this._background = _createSurface('background');
+    this._content    = _createSurface('content');
+  }
+
+  function _applyMods() {
+    this._backMod = _createMod();
+    this._contMod = _createMod();
+  }
+
+  function _applyTransitionables() {
+    this._ticker = new Transitionable(0);
+    this._turner = new Transitionable(0);
+  }
+
+  function _wireTransitionables() {
+    this._backMod.transformFrom(function() {
+      return Transform.rotateZ(this._turner.get());
+    }.bind(this));
+    this._contMod.transformFrom(function() {
+      return Transform.rotateZ(this._ticker.get());
+    }.bind(this));
+  }
+
+  function _createScene() {
+    this.add(this._backMod).add(this._background);
+    this.add(this._contMod).add(this._content);
+  }
 
   function _createSurface(type) {
     switch (type) {
@@ -52,20 +93,8 @@ define(function(require) {
     });
   }
 
-  function _init(spinner) {
-    spinner._backMod.transformFrom(function() {
-      return Transform.rotateZ(spinner._turner.get());
-    });
-    spinner._contMod.transformFrom(function() {
-      return Transform.rotateZ(spinner._ticker.get());
-    });
-    spinner.add(spinner._backMod).add(spinner._background);
-    spinner.add(spinner._contMod).add(spinner._content);
-  }
-
-  Spinner.prototype             = Object.create(View.prototype);
-  Spinner.prototype.constructor = Spinner;
-
+  // Prototypal Methods
+  
   Spinner.prototype.turn = function() {
     var turner = this._turner;
     turner.set(Math.PI / 12, {curve: Easing.inQuad, duration: 300}, function() {

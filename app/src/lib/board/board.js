@@ -10,9 +10,9 @@ define(function(require) {
 
   function Board() {
     View.call(this);
-    this._layout     = new GridLayout({ dimensions: [5,5] });
-    this.wordBuilder = new WordBuilder();
+    this._layout     = _createLayout();
     this._background = _createBackground();
+    this.wordBuilder = new WordBuilder();
     this.tiles       = [];
 
     _init(this);
@@ -23,6 +23,35 @@ define(function(require) {
 
   // Helpers
 
+  function _init(board) {
+    [
+
+      _createScene,
+      _populate
+
+    ].forEach(function(step) {
+      step.apply(board)
+    });
+  }
+
+  function _createScene() {
+    this.add(this._layout);
+    this.add(this._background);
+  }
+
+  function _populate() {
+    this.tiles = [];
+    for (var i = 0 ; i < 25 ; i++) this.tiles.push(new Tile(_getRandomChar(), i));
+    this.tiles.forEach(function(tile) {
+      tile._eventInput.on('click', function() {
+        var index = this.wordBuilder.indexOf(tile);
+        if (index !== -1) this.wordBuilder.remove(index);
+        else this.wordBuilder.push(tile);
+      }.bind(this));
+    }.bind(this));
+    this._layout.sequenceFrom(this.tiles);
+  }
+
   function _createBackground() {
     return new Surface({
       properties: {
@@ -32,29 +61,16 @@ define(function(require) {
     });
   }
 
+  function _createLayout() {
+    return new GridLayout({ 
+      dimensions: [5,5] 
+    });
+  }
+
   function _getRandomChar() {
     var type  = Math.random() > 0.6 ? 'vowels' : 'consonants';
     var index = Math.floor(Chars[type].length * Math.random());
     return Chars[type][index];
-  }
-
-  function _populate(board) {
-    board.tiles = [];
-    for (var i = 0 ; i < 25 ; i++) board.tiles.push(new Tile(_getRandomChar(), i));
-    board.tiles.forEach(function(tile) {
-      tile._eventInput.on('click', function() {
-        var index = board.wordBuilder.indexOf(tile);
-        if (index !== -1) board.wordBuilder.remove(index);
-        else board.wordBuilder.push(tile);
-      });
-    });
-    board._layout.sequenceFrom(board.tiles);
-  }
-
-  function _init(board) {
-    board.add(board._layout);
-    board.add(board._background);
-    _populate(board);
   }
 
   function typeCheck(obj) {

@@ -21,8 +21,8 @@ define(function(require) {
     this.board    = new Board();
     this.menu     = new TitleBar();
     this.playArea = new ScoreBoard('styles/img/guy1.jpg', 'styles/img/guy2.jpg');
+
     _init(this);
-    _wireEvents(this);
   }
 
   Game.prototype             = Object.create(View.prototype);
@@ -31,24 +31,41 @@ define(function(require) {
   // Helpers
 
   function _init(game) {
-    game._layout.footer.add(game.board);
-    game._layout.header.add(game.menu);
-    game._layout.content.add(game.playArea);
-    game._size.setSize(function() {
-      return [100 + game._sizer.get() * (window.innerWidth - 100), 100 + game._sizer.get() * (window.innerHeight - 100)];
+    [
+
+      _wireTransitionables,
+      _wireEvents,
+      _createScene
+
+    ].forEach(function(step) {
+      step.apply(game);
     });
-    game.add(game._size).add(game._layout);
   }
 
-  function _wireEvents(game) {
-    game.IO.subscribe(game.board.wordBuilder.IO);
-    game.IO.on('WB activated', function() {
-      game.playArea.overlap();
-    });
-    game.IO.on('WB deactivated', function() {
-      game.playArea.home();
-      game.playArea.setPlayer();
-    });
+  function _wireTransitionables() {
+    this._size.setSize(function() {
+      return [100 + this._sizer.get() * (window.innerWidth - 100), 100 + this._sizer.get() * (window.innerHeight - 100)];
+    }.bind(this));
+  }
+
+  function _wireEvents() {
+    this.IO.subscribe(this.board.wordBuilder.IO);
+
+    this.IO.on('WB activated', function() {
+      this.playArea.overlap();
+    }.bind(this));
+
+    this.IO.on('WB deactivated', function() {
+      this.playArea.home();
+      this.playArea.setPlayer();
+    }.bind(this));
+  }
+
+  function _createScene() {
+    this._layout.footer.add(this.board);
+    this._layout.header.add(this.menu);
+    this._layout.content.add(this.playArea);
+    this.add(this._size).add(this._layout);
   }
 
   function _createLayout() {
@@ -65,7 +82,7 @@ define(function(require) {
     });
   }
 
-  // This isn't going to work most likely
+  // Prototypal Methods
 
   Game.prototype.toThumb = function() {
     this.board.hideAllLetters();

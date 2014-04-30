@@ -3,43 +3,48 @@ define(function(require) {
   var EventHandler = require('famous/core/EventHandler');
 
   function WordBuilder() {
-    this.totalWidth = window.innerWidth;
     this.tiles      = [];
     this.IO         = new EventHandler();
-    _calculateTileWidth(this);
+    _calculateTileWidth.apply(this);
   }
 
   //helpers
 
-  function _calculateTileWidth(wordBuilder) {
-    wordBuilder.tileWidth = wordBuilder.totalWidth / (wordBuilder.tiles.length > 5 ? wordBuilder.tiles.length : 5);
+  function _calculateTileWidth() {
+    this.tileWidth = window.innerWidth / (this.tiles.length > 5 ? this.tiles.length : 5);
   }
 
-  function _applyTileWidth(wordBuilder) {
-    wordBuilder.tiles.forEach(function(tile) {
-      tile.resize(wordBuilder.tileWidth);
-    });
+  function _applyTileWidth() {
+    this.tiles.forEach(function(tile) {
+      tile.resize(this.tileWidth);
+    }.bind(this));
   }
 
-  function _reflow(wordBuilder) {
+  function _reflow() {
     var pos;
     var offset;
     var center;
-    wordBuilder.tiles.forEach(function(tile, i, tiles) {
+    this.tiles.forEach(function(tile, i, tiles) {
       tile.halt();
       pos    = tile.getPos();
-      offset = i * wordBuilder.tileWidth - pos[0] * window.innerWidth / 5;
-      center = (window.innerWidth - tiles.length * wordBuilder.tileWidth) / 2;
+      offset = i * this.tileWidth - pos[0] * window.innerWidth / 5;
+      center = (window.innerWidth - tiles.length * this.tileWidth) / 2;
       tile.goTo(offset + center, -100 - (pos[1] * window.innerWidth / 5));
-    });
+    }.bind(this));
   }
 
   // Prototypal Methods
 
   WordBuilder.prototype._refresh = function() {
-    _calculateTileWidth(this);
-    _applyTileWidth(this);
-    _reflow(this);
+    [
+
+      _calculateTileWidth,
+      _applyTileWidth,
+      _reflow
+
+    ].forEach(function(step) {
+      step.apply(this)
+    }.bind(this));
   };
 
   WordBuilder.prototype.push = function(tile) {
@@ -54,20 +59,11 @@ define(function(require) {
     if (!this.tiles.length) this.IO.emit('WB deactivated');
     tile.goTo(0, 0);
     tile.resize(window.innerWidth / 5);
-    this._refresh();
     return this;
   };
 
   WordBuilder.prototype.removeAll = function() {
-    this.tiles.forEach(function(tile) {
-      tile.goTo(0, 0, {
-        method: 'spring',
-        period: 500,
-        dampingRatio: 0.6
-      });
-      tile.resize(window.innerWidth / 5);
-    });
-    this.tiles = [];
+    while (this.tiles.length) this.remove(0);
     this._refresh();
     if (!this.tiles.length) this.IO.emit('WB deactivated');
     return this;

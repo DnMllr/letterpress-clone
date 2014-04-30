@@ -8,8 +8,6 @@ define(function(require) {
 
   function MenuBar() {
     View.call(this);
-    this._left  = _createBack();
-    this._right = _createBurger();
     this._mod   = new Modifier();
 
     _init(this);
@@ -21,18 +19,34 @@ define(function(require) {
   // Helpers
 
   function _init(menuBar) {
+    [
 
-    var mod = menuBar.add(menuBar._mod);
+      _applySurfaces,
+      _createScene
+
+    ].forEach(function(step) {
+      step.apply(menuBar);
+    });
+  }
+
+  function _applySurfaces() {
+    this._left  = _createBack();
+    this._right = _createBurger();
+  }
+
+  function _createScene() {
+
+    var mod = this.add(this._mod);
 
     mod.add(new Modifier({
       transform: Transform.translate(15, 0, 0),
       origin: [0, 0.5]
-    })).add(menuBar._left);
+    })).add(this._left);
 
     mod.add(new Modifier({
       transform : Transform.translate(-15, 0, 0),
       origin    : [1, 0.5]
-    })).add(menuBar._right);
+    })).add(this._right);
 
   }
 

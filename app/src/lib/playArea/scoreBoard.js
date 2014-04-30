@@ -15,13 +15,9 @@ define(function(require) {
     View.call(this);
     this._currentPlayer = 1;
     this.position       = 'home';
-    this._indicator     = createIndicator();
+    this._indicator     = _createIndicator();
 
-    _createSpring(this);
-    _createPlayers.apply(this, arguments);
-    _applyTransitionables(this);
-    _applyMods(this);
-    _init(this);
+    _init(this, arguments);
   }
 
   ScoreBoard.prototype             = Object.create(View.prototype);
@@ -29,33 +25,74 @@ define(function(require) {
 
   //Helpers
 
-  function _init(scoreBoard) {
-    scoreBoard._modH.transformFrom(function() {
-      return Transform.translate(-1 * scoreBoard._translateX.get(), scoreBoard._translateY.get(), 0);
+  function _init(scoreBoard, args) {
+    [
+
+      _createSpring,
+      _createPlayers,
+      _applyTransitionables,
+      _applyMods,
+      _wireTransitionables,
+      _createScene
+
+    ].forEach(function(step) {
+      step.apply(scoreBoard, args)
     });
-    scoreBoard._modA.transformFrom(function() {
-      return Transform.translate(scoreBoard._translateX.get(), scoreBoard._translateY.get(), 0);
-    });
-    scoreBoard._modI.transformFrom(function() {
-      return Transform.translate(scoreBoard._translateI.get(), 80, 0);
-    });
-    scoreBoard._modI.opacityFrom(function() {
-      return (scoreBoard._translateY.get() + 30) / 30;
-    });
-    scoreBoard.add(scoreBoard._modH).add(scoreBoard._home);
-    scoreBoard.add(scoreBoard._modA).add(scoreBoard._away);
-    scoreBoard.add(scoreBoard._modI).add(scoreBoard._indicator);
   }
 
-  function _createSpring(scoreBoard) {
-    scoreBoard._spring = {
+  function _createSpring() {
+    this._spring = {
       method       : 'spring',
       period       : 200,
       dampingRatio : 0.3
     };
   }
 
-  function createIndicator() {
+  function _createPlayers(url1, url2) {
+    this._home = new PlayerView(url1, 0);
+    this._away = new PlayerView(url2, 1);
+  }
+
+  function _applyTransitionables() {
+    this._translateX = new Transitionable(40);
+    this._translateY = new Transitionable(0);
+    this._translateI = new Transitionable(-63);
+  }
+
+  function _applyMods() {
+    this._modH = _createMod();
+    this._modA = _createMod();
+    this._modI = _createMod();
+  }
+
+  function _wireTransitionables() {
+    
+    this._modH.transformFrom(function() {
+      return Transform.translate(-1 * this._translateX.get(), this._translateY.get(), 0);
+    }.bind(this));
+
+    this._modA.transformFrom(function() {
+      return Transform.translate(this._translateX.get(), this._translateY.get(), 0);
+    }.bind(this));
+
+    this._modI.transformFrom(function() {
+      return Transform.translate(this._translateI.get(), 80, 0);
+    }.bind(this));
+
+    this._modI.opacityFrom(function() {
+      return (this._translateY.get() + 30) / 30;
+    }.bind(this));
+
+  }
+
+  function _createScene() {
+    this.add(this._modH).add(this._home);
+    this.add(this._modA).add(this._away);
+    this.add(this._modI).add(this._indicator);
+  }
+
+
+  function _createIndicator() {
     return new Surface({
       size       : [true, true],
       content    : '<i class="icon-downarrow"></i>',
@@ -69,33 +106,18 @@ define(function(require) {
     });
   }
 
-  function createMod() {
+  function _createMod() {
     return new Modifier({
       origin: [0.5, 0]
     });
-  }
-
-  function _applyMods(scoreBoard) {
-    scoreBoard._modH = createMod();
-    scoreBoard._modA = createMod();
-    scoreBoard._modI = createMod();
-  }
-
-  function _applyTransitionables(scoreBoard) {
-    scoreBoard._translateX = new Transitionable(40);
-    scoreBoard._translateY = new Transitionable(0);
-    scoreBoard._translateI = new Transitionable(-63);
-  }
-
-  function _createPlayers(url1, url2) {
-    this._home = new PlayerView(url1, 0);
-    this._away = new PlayerView(url2, 1);
   }
 
   // Prototypal Methods
 
   ScoreBoard.prototype.overlap = function() {
     this.position = 'overlap';
+    this._home.hideScore();
+    this._away.hideScore();
     this._translateX.halt();
     this._translateY.halt();
     this._translateX.set(20, this._spring);
@@ -104,6 +126,8 @@ define(function(require) {
 
   ScoreBoard.prototype.home = function() {
     this.position = 'home';
+    this._home.showScore();
+    this._away.showScore();
     this._translateX.halt();
     this._translateY.halt();
     this._translateX.set(40, this._spring);

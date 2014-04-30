@@ -13,11 +13,9 @@ define(function(require) {
   function PlayerView(avatarUrl, index) {
     View.call(this);
     this._parity = index % 2;
-    this.player  = new Avatar(avatarUrl, index);
     this.score   = _createRandScore();
+    this.player  = new Avatar(avatarUrl, index);
     this._ghost  = new Transitionable(1);
-    this._modP   = _createMod('p');
-    this._modS   = _createMod('s');
 
     _init(this);
   }
@@ -28,11 +26,36 @@ define(function(require) {
   // Helpers
 
   function _init(playerView) {
-    playerView.add(playerView._modP).add(playerView.player);
-    playerView.add(playerView._modS).add(playerView.score);
-    playerView._modS.opacityFrom(function() {
-      return playerView._ghost.get();
+    [
+
+      _createMods,
+      _wireTransitionables,
+      _createScene
+
+    ].forEach(function(step) {
+      step.apply(playerView)
+    })
+  }
+
+  function _createMods() {
+    this._modS = new Modifier({
+      origin: [0.5, 0],
+      transform: Transform.translate(0, 70)
     });
+    this._modP = new Modifier({
+      origin: [0.5, 0]
+    });
+  }
+
+  function _wireTransitionables() {
+    this._modS.opacityFrom(function() {
+      return this._ghost.get();
+    }.bind(this));
+  }
+
+  function _createScene() {
+    this.add(this._modP).add(this.player);
+    this.add(this._modS).add(this.score);
   }
 
   function _createRandScore() {
@@ -49,26 +72,14 @@ define(function(require) {
     });
   }
 
-  function _createMod(type) {
-    switch (type) {
-      case 's': return new Modifier({
-          origin: [0.5, 0],
-          transform: Transform.translate(0, 70)
-        });
-      case 'p': return new Modifier({
-          origin: [0.5, 0]
-        });
-    }
-  }
-
   // Prototypal Methods
 
   PlayerView.prototype.hideScore = function() {
-    this._ghost.set(0, {curve: Easing.outQuad, duration: 500});
+    this._ghost.set(0, {curve: Easing.outQuad, duration: 250});
   };
 
   PlayerView.prototype.showScore = function() {
-    this._ghost.set(1, {curve: Easing.outQuad, duration: 500});
+    this._ghost.set(1, {curve: Easing.outQuad, duration: 250});
   };
 
   return PlayerView;

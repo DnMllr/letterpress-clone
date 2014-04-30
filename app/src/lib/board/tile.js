@@ -14,17 +14,10 @@ define(function(require) {
     View.call(this);
     this.letter    = letter;
     this.color     = 0;
-    this._parity   = index % 2;
-    this.x         = index % 5;
-    this.y         = Math.floor(index / 5);
     this._surface  = _createSurface(letter);
-    this._wiggler  = new Transitionable(0);
-    this._pos      = [new Transitionable(0), new Transitionable(0)];
-    this._width    = new Transitionable(window.innerWidth / 5);
-    this._turn     = _createMod();
-    this._position = _createMod();
 
-    _init(this);
+    _init(this, arguments);
+    this.setColor(0);
   }
 
   Tile.prototype             = Object.create(View.prototype);
@@ -32,19 +25,61 @@ define(function(require) {
 
   //Helpers
 
-  function _init(tile) {
-    tile._surface.pipe(tile);
-    tile.setColor(0);
-    tile._turn.transformFrom(function() {
-      return Transform.rotateZ(tile._wiggler.get());
+  function _init(tile, args) {
+    [
+
+      _applyIndex,
+      _applyTransitionables,
+      _applyMods,
+      _wireTransitionables,
+      _wireEvents,
+      _createScene
+
+    ].forEach(function(step) {
+      step.apply(tile, args)
     });
-    tile._position.transformFrom(function() {
-      return Transform.translate(tile._pos[0].get(), tile._pos[1].get());
-    });
-    tile._position.sizeFrom(function() {
-      return [tile._width.get(), window.innerWidth / 5];
-    });
-    tile.add(tile._position).add(tile._turn).add(tile._surface);
+  }
+
+  function _applyIndex(letter, index) {
+    this._parity   = index % 2;
+    this.x         = index % 5;
+    this.y         = Math.floor(index / 5);
+  }
+
+  function _applyTransitionables() {
+    this._width   = new Transitionable(window.innerWidth / 5);
+    this._wiggler = new Transitionable(0);
+    this._pos     = [
+      new Transitionable(0), 
+      new Transitionable(0)
+    ];
+  }
+
+  function _applyMods() {
+    this._turn     = _createMod();
+    this._position = _createMod();
+  }
+
+  function _wireTransitionables() {
+    this._turn.transformFrom(function() {
+      return Transform.rotateZ(this._wiggler.get());
+    }.bind(this));
+
+    this._position.transformFrom(function() {
+      return Transform.translate(this._pos[0].get(), this._pos[1].get());
+    }.bind(this));
+
+    this._position.sizeFrom(function() {
+      return [this._width.get(), window.innerWidth / 5];
+    }.bind(this));
+  }
+  
+  function _wireEvents() {
+    this._surface.pipe(this);
+  }
+
+  function _createScene() {
+    this.add(this._position).add(this._turn).add(this._surface);
   }
 
   function _createSurface(letter) {
@@ -133,6 +168,7 @@ define(function(require) {
       period: 250,
       dampingRatio: 0.4
     };
+    this.halt();
     this._pos[0].set(x, options);
     this._pos[1].set(y, options);
   };
