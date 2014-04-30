@@ -56,9 +56,10 @@ define(function(require) {
       content    : '<i class="icon-downarrow"></i>',
       classes    : ['indicator'],
       properties : {
-        textAlign : 'center',
-        fontSize  : '48px',
-        color     : 'rgb(0, 177, 253)'
+        textAlign     : 'center',
+        fontSize      : '48px',
+        color         : 'rgb(0, 177, 253)',
+        pointerEvents : 'none'
       }
     });
   }

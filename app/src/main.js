@@ -17,7 +17,7 @@ define(function(require) {
     origin: [0.5, 0.5]
   }));
   node.add(app.games[0]);
-  node.add(app.modalView);
+  node.add(app.modalController);
 
   // animation helpers
 
@@ -49,14 +49,14 @@ define(function(require) {
     },
     run : function() {
       wait(500).then(function() {
-        app.modalView.display('message1');
+        app.modalController.display('message1');
         return wait(1000);
       }).then(function() {
-        app.modalView.getShown().mouseDown(0); // A suboptimal strategy for faking the click.
+        app.modalController.getShown().mouseDown(0); // A suboptimal strategy for faking the click.
         return wait(100);
       }).then(function() {
-        app.modalView.getShown().rerenderHTML(); // A suboptimal strategy for faking the click.
-        app.modalView.away();
+        app.modalController.getShown().rerenderHTML(); // A suboptimal strategy for faking the click.
+        app.modalController.away();
         app.games[0].board.wiggleByColor([-1, -2]);
       });
     },

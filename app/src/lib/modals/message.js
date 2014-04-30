@@ -47,12 +47,13 @@ define(function(require) {
     return new Surface({
       content    : (heading !== '' ?  '<div class="modal heading">' + heading + '</div>' : '')
         + '<div class="modal message">' + message + '</div>' + generateButtons(buttons),
-      size       : [true, true],
+      size       : [window.innerWidth - 50, 150],
       properties : {
         borderRadius    : '12px',
         boxShadow       : '0px 0px 15px 2px rgba(0,0,0,0.50)',
         textAlign       : 'center',
-        backgroundColor : 'white'
+        backgroundColor : 'white',
+        zIndex          : 2
       }
     });
   }
@@ -62,7 +63,7 @@ define(function(require) {
   Message.prototype.turn = function() {
     var turner = this._turner;
     this._turner.set(Math.PI / 12, {curve: Easing.inQuad, duration: 300}, function() {
-      turner.set(0, {});
+      turner.set(0);
     });
   };
 

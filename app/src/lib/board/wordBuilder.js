@@ -1,8 +1,11 @@
-define(function() {
+define(function(require) {
+
+  var EventHandler = require('famous/core/EventHandler');
 
   function WordBuilder() {
     this.totalWidth = window.innerWidth;
     this.tiles      = [];
+    this.IO         = new EventHandler();
     _calculateTileWidth(this);
   }
 
@@ -23,6 +26,7 @@ define(function() {
     var offset;
     var center;
     wordBuilder.tiles.forEach(function(tile, i, tiles) {
+      tile.halt();
       pos    = tile.getPos();
       offset = i * wordBuilder.tileWidth - pos[0] * window.innerWidth / 5;
       center = (window.innerWidth - tiles.length * wordBuilder.tileWidth) / 2;
@@ -39,6 +43,7 @@ define(function() {
   };
 
   WordBuilder.prototype.push = function(tile) {
+    if (!this.tiles.length) this.IO.emit('WB activated');
     this.tiles.push(tile);
     this._refresh();
     return this;
@@ -46,6 +51,7 @@ define(function() {
 
   WordBuilder.prototype.remove = function(index) {
     var tile = this.tiles.splice(index, 1)[0];
+    if (!this.tiles.length) this.IO.emit('WB deactivated');
     tile.goTo(0, 0);
     tile.resize(window.innerWidth / 5);
     this._refresh();
@@ -63,6 +69,7 @@ define(function() {
     });
     this.tiles = [];
     this._refresh();
+    if (!this.tiles.length) this.IO.emit('WB deactivated');
     return this;
   };
 

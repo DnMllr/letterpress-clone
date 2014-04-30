@@ -8,6 +8,7 @@ define(function(require) {
   var ScoreBoard         = require('./playArea/scoreBoard');
   var Transitionable     = require('famous/transitions/Transitionable');
   var Easing             = require('famous/transitions/Easing');
+  var EventHandler       = require('famous/core/EventHandler');
 
   // Class Constructor
 
@@ -16,12 +17,14 @@ define(function(require) {
     this._size    = new Modifier({
       size: [100, 100]
     });
+    this.IO       = new EventHandler();
     this._sizer   = new Transitionable(1);
     this.board    = new Board();
     this.menu     = new TitleBar();
     this.playArea = new ScoreBoard('styles/img/guy1.jpg', 'styles/img/guy2.jpg');
     this._layout  = createLayout();
     _init(this);
+    _wireEvents(this);
   }
 
   Game.prototype             = Object.create(View.prototype);
@@ -57,6 +60,17 @@ define(function(require) {
       return [100 + game._sizer.get() * (window.innerWidth - 100), 100 + game._sizer.get() * (window.innerHeight - 100)];
     });
     game.add(game._size).add(game._layout);
+  }
+
+  function _wireEvents(game) {
+    game.IO.subscribe(game.board.wordBuilder.IO);
+    game.IO.on('WB activated', function() {
+      game.playArea.overlap();
+    });
+    game.IO.on('WB deactivated', function() {
+      game.playArea.home();
+      game.playArea.setPlayer();
+    });
   }
 
   function createLayout() {

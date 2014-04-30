@@ -21,7 +21,6 @@ define(function(require) {
     this._wiggler = new Transitionable(0);
     this._pos     = [new Transitionable(0), new Transitionable(0)];
     this._width   = new Transitionable(window.innerWidth / 5);
-    this._size    = new Modifier();
     this._turn    = new Modifier({
       origin: [0.5, 0.5]
     });
@@ -133,6 +132,11 @@ define(function(require) {
     };
     this._pos[0].set(x, options);
     this._pos[1].set(y, options);
+  };
+
+  Tile.prototype.halt = function() {
+    this._pos[0].halt();
+    this._pos[1].halt();
   };
 
   Tile.prototype.resize = function(size) {

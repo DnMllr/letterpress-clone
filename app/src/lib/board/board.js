@@ -1,6 +1,7 @@
 define(function(require) {
   var GridLayout  = require('famous/views/GridLayout');
   var View        = require('famous/core/View');
+  var Surface     = require('famous/core/Surface');
   var Tile        = require('./tile');
   var Chars       = require('./charDict');
   var WordBuilder = require('./wordBuilder');
@@ -11,6 +12,12 @@ define(function(require) {
     View.call(this);
     this._layout = new GridLayout({
       dimensions: [5,5]
+    });
+    this._background = new Surface({
+      properties: {
+        background : 'rgb(235, 234, 232)',
+        zIndex     : -1
+      }
     });
     this.wordBuilder = new WordBuilder();
     this.tiles = [];
@@ -24,7 +31,7 @@ define(function(require) {
   // Helpers
 
   function _getRandomChar() {
-    var type  = Math.random() > 0.80 ? 'vowels' : 'consonants';
+    var type  = Math.random() > 0.6 ? 'vowels' : 'consonants';
     var index = Math.floor(Chars[type].length * Math.random());
     return Chars[type][index];
   }
@@ -44,6 +51,7 @@ define(function(require) {
 
   function _init(b) {
     b.add(b._layout);
+    b.add(b._background);
     _populate(b);
   }
 
