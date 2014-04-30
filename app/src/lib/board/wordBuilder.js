@@ -43,7 +43,7 @@ define(function(require) {
       _reflow
 
     ].forEach(function(step) {
-      step.apply(this)
+      step.apply(this);
     }.bind(this));
   };
 
@@ -59,6 +59,7 @@ define(function(require) {
     if (!this.tiles.length) this.IO.emit('WB deactivated');
     tile.goTo(0, 0);
     tile.resize(window.innerWidth / 5);
+    this._refresh();
     return this;
   };
 

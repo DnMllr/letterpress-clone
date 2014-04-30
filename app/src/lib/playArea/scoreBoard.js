@@ -36,7 +36,7 @@ define(function(require) {
       _createScene
 
     ].forEach(function(step) {
-      step.apply(scoreBoard, args)
+      step.apply(scoreBoard, args);
     });
   }
 
@@ -66,7 +66,7 @@ define(function(require) {
   }
 
   function _wireTransitionables() {
-    
+
     this._modH.transformFrom(function() {
       return Transform.translate(-1 * this._translateX.get(), this._translateY.get(), 0);
     }.bind(this));
@@ -90,7 +90,6 @@ define(function(require) {
     this.add(this._modA).add(this._away);
     this.add(this._modI).add(this._indicator);
   }
-
 
   function _createIndicator() {
     return new Surface({

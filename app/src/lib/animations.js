@@ -1,4 +1,4 @@
-define(function(require) {
+define(function() {
 
   // animation helpers
 
@@ -49,11 +49,9 @@ define(function(require) {
       }
     }
   }, {
-    build    : function(app) {},
-    run      : function(app) {},
-    teardown : function(app) {}
+    build    : function() {},
+    run      : function() {},
+    teardown : function() {}
   }];
-
-  return animation;
 
 });

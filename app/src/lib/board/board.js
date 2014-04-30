@@ -30,7 +30,7 @@ define(function(require) {
       _populate
 
     ].forEach(function(step) {
-      step.apply(board)
+      step.apply(board);
     });
   }
 
@@ -62,8 +62,8 @@ define(function(require) {
   }
 
   function _createLayout() {
-    return new GridLayout({ 
-      dimensions: [5,5] 
+    return new GridLayout({
+      dimensions: [5,5]
     });
   }
 

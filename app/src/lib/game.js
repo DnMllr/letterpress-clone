@@ -1,7 +1,7 @@
 define(function(require) {
 
   var Board              = require('./board/board');
-  var TitleBar           = require('./titleBar/titleBar');
+  var TitleController    = require('./titleBar/titleController');
   var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
   var Modifier           = require('famous/core/Modifier');
   var View               = require('famous/core/View');
@@ -19,7 +19,7 @@ define(function(require) {
     this.IO       = new EventHandler();
     this._sizer   = new Transitionable(1);
     this.board    = new Board();
-    this.menu     = new TitleBar();
+    this.menu     = new TitleController();
     this.playArea = new ScoreBoard('styles/img/guy1.jpg', 'styles/img/guy2.jpg');
 
     _init(this);

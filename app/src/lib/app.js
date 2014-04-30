@@ -20,7 +20,7 @@ define(function(require) {
 
   App.prototype.build = function(animation) {
     animation.build(this);
-  }
+  };
 
   App.prototype.run = function(animation) {
     animation.run(this);

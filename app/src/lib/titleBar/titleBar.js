@@ -8,7 +8,6 @@ define(function(require) {
 
   function MenuBar() {
     View.call(this);
-    this._mod   = new Modifier();
 
     _init(this);
   }
@@ -36,14 +35,12 @@ define(function(require) {
 
   function _createScene() {
 
-    var mod = this.add(this._mod);
-
-    mod.add(new Modifier({
+    this.add(new Modifier({
       transform: Transform.translate(15, 0, 0),
       origin: [0, 0.5]
     })).add(this._left);
 
-    mod.add(new Modifier({
+    this.add(new Modifier({
       transform : Transform.translate(-15, 0, 0),
       origin    : [1, 0.5]
     })).add(this._right);

@@ -94,12 +94,15 @@ define(function(require) {
   }
 
   // Prototypal Methods
-  
+
   Spinner.prototype.turn = function() {
-    var turner = this._turner;
-    turner.set(Math.PI / 12, {curve: Easing.inQuad, duration: 300}, function() {
-      turner.set(0, {});
-    });
+    this._turner.set(Math.PI / 12, {curve: Easing.inQuad, duration: 300}, function() {
+      this._turner.set(0, {});
+    }.bind(this));
+  };
+
+  Spinner.prototype.reset = function() {
+    this._turner.set(0);
   };
 
   Spinner.prototype.tick = function() {

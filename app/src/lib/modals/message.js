@@ -42,15 +42,27 @@ define(function(require) {
       _createScene
 
     ].forEach(function(step) {
-      step.apply(Message, args)
+      step.apply(Message, args);
     });
   }
 
   function _applySurface() {
-    this._surface = new Surface({
+    if (this.buttons != null) this._surface = new Surface({
       content    : (this.heading !== '' ?  '<div class="modal heading">' + this.heading + '</div>' : '')
         + '<div class="modal message">' + this.message + '</div>' + generateButtons(this.buttons),
       size       : [window.innerWidth - 50, 150],
+      properties : {
+        borderRadius    : '12px',
+        boxShadow       : '0px 0px 15px 2px rgba(0,0,0,0.50)',
+        textAlign       : 'center',
+        backgroundColor : 'white',
+        zIndex          : 2
+      }
+    });
+    else this._surface = new Surface({
+      content    : (this.heading !== '' ?  '<div class="modal heading">' + this.heading + '</div>' : '')
+        + '<div class="modal message">' + this.message + '</div>',
+      size       : [window.innerWidth - 175, 50],
       properties : {
         borderRadius    : '12px',
         boxShadow       : '0px 0px 15px 2px rgba(0,0,0,0.50)',
@@ -80,10 +92,13 @@ define(function(require) {
   // Prototypal Methods
 
   Message.prototype.turn = function() {
-    var turner = this._turner;
     this._turner.set(Math.PI / 12, {curve: Easing.inQuad, duration: 300}, function() {
-      turner.set(0);
-    });
+      this._turner.set(0);
+    }.bind(this));
+  };
+
+  Message.prototype.reset = function() {
+    this._turner.set(0);
   };
 
   Message.prototype.rerenderHTML = function() {

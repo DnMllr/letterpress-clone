@@ -36,7 +36,7 @@ define(function(require) {
       _createScene
 
     ].forEach(function(step) {
-      step.apply(tile, args)
+      step.apply(tile, args);
     });
   }
 
@@ -50,7 +50,7 @@ define(function(require) {
     this._width   = new Transitionable(window.innerWidth / 5);
     this._wiggler = new Transitionable(0);
     this._pos     = [
-      new Transitionable(0), 
+      new Transitionable(0),
       new Transitionable(0)
     ];
   }
@@ -73,7 +73,7 @@ define(function(require) {
       return [this._width.get(), window.innerWidth / 5];
     }.bind(this));
   }
-  
+
   function _wireEvents() {
     this._surface.pipe(this);
   }

@@ -14,7 +14,7 @@ define(function(require) {
     View.call(this);
     this.lightbox   = _createLightBox();
     this.background = _createSurface();
-    
+
     _init(this);
   }
 
@@ -30,7 +30,7 @@ define(function(require) {
       _createScene
 
     ].forEach(function(step) {
-      step.apply(ModalController)
+      step.apply(ModalController);
     });
   }
 
@@ -38,6 +38,10 @@ define(function(require) {
     this.messages = {};
     this.messages.message1 = {
       modal : new Message('Your Turn', '<strong> You </strong> Played <strong>Slippers</strong>, </br> <strong> Robert </strong> Played <strong> Pressing </strong>', ['OK']),
+      dark  : false
+    };
+    this.messages.message2 = {
+      modal : new Message('', '<div class="score-card"><span class="blue"> + 8 </span> <span class="red"> - 3 </span></div>'),
       dark  : false
     };
     this.messages.spinner = {
@@ -55,8 +59,6 @@ define(function(require) {
     return new Lightbox({
       inTransform   : Transform.translate(0, -window.innerHeight / 2, 0),
       outTransform  : Transform.translate(0, window.innerHeight / 2, 0),
-      showTransform : Transform.translate(0, 0, 0),
-      showOrigin    : [0, 0.5],
       outOpacity    : 1,
       inTransition  : { duration: 500, curve: Easing.outBack },
       outTransition : { duration: 300, curve: Easing.inQuad }
@@ -78,10 +80,17 @@ define(function(require) {
   // Prototypal Methods
 
   ModalController.prototype.display = function(key) {
+    this.messages[key].modal.reset();
     this.lightbox.show(this.messages[key].modal);
-    if (this.messages[key].dark) this.background.setProperties({
-      background: 'rgba(0, 0, 0, 0.4)'
-    });
+    if (this.messages[this.shown]) this.messages[this.shown].modal.turn();
+    if (this.messages[key].dark)
+      this.background.setProperties({
+        background: 'rgba(0, 0, 0, 0.4)'
+      });
+    else if (this.messages[this.shown] && this.messages[this.shown].dark)
+      this.background.setProperties({
+        background: 'rgba(0, 0, 0, 0)'
+      });
     this.shown = key;
   };
 

@@ -33,8 +33,8 @@ define(function(require) {
       _createScene
 
     ].forEach(function(step) {
-      step.apply(playerView)
-    })
+      step.apply(playerView);
+    });
   }
 
   function _createMods() {

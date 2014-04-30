@@ -53,7 +53,33 @@ html {
   background-color: black;
   color: white;
 }
-/* Just click to select the code */
+
+.submit-pill {
+  background: rgb(0, 177, 253);
+  border-radius: 8px;
+  padding: 2px;
+  text-align: center;
+}
+
+.submit-pill.clicked {
+  background: rgb(0, 150, 230);
+}
+
+.score-card {
+  font-size: 30px;
+  font-weight: bold;
+  padding: 2px;
+}
+
+.score-card > .red {
+  float: right;
+  color: rgb(255, 94, 64);
+}
+
+.score-card > .blue {
+  float: left;
+  color: rgb(0, 177, 253);
+}
  
 @charset "UTF-8";
  
