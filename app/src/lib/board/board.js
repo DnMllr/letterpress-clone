@@ -77,6 +77,47 @@ define(function(require) {
     return {}.toString.call(obj).slice(8, -1);
   }
 
+  function buildGrid(tiles) {
+    var grid = [[], [], [], [], []];
+    tiles.forEach(function(tile) {
+      var pos = tile.getPos();
+      grid[pos[1]][pos[0]] = tile;
+    });
+    return grid;
+  }
+
+  function findSurrounded(grid) {
+    var surrounded = {};
+    grid.forEach(function(row, y) {
+      if (row.length) 
+        row.forEach(function(tile, x) {
+          if (tile) {
+            var xs = [];
+            var ys = [];
+            if (x - 1 > -1) xs.push(x - 1);
+            if (x + 1 < 5) xs.push(x + 1);
+            if (y - 1 > -1) ys.push(y - 1);
+            if (y + 1 < 5) ys.push(y + 1);
+            var neighbors = [];
+            xs.forEach(function(xP) {
+              neighbors.push([xP, y]);
+            });
+            ys.forEach(function(yP) {
+              neighbors.push([x, yP]);
+            });
+            var tally = 0;
+            var total = xs.length + ys.length;
+            neighbors.forEach(function(neighbor) {
+              var possibleTile = grid[neighbor[1]][neighbor[0]];
+              if (possibleTile) tally++;
+            });
+            if (tally === total) surrounded[tile.getPos().join('')] = tile;
+          }
+        });
+    });
+    return surrounded;
+  }
+
   // Prototypal Methods
 
   Board.prototype.tileByPosition = function(x, y) {
@@ -110,6 +151,10 @@ define(function(require) {
     this.tiles.forEach(function(tile) {
       tile.showLetter();
     });
+  };
+
+  Board.prototype.acceptWord = function(color) {
+    return findSurrounded(buildGrid(this.wordBuilder.tiles));
   };
 
   return Board;
