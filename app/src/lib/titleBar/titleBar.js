@@ -1,14 +1,43 @@
 define(function(require) {
-  var Surface       = require('famous/core/Surface');
-  var Transform     = require('famous/core/Transform');
-  var StateModifier = require('famous/modifiers/StateModifier');
-  var View          = require('famous/core/View');
+  var Surface   = require('famous/core/Surface');
+  var Transform = require('famous/core/Transform');
+  var Modifier  = require('famous/core/Modifier');
+  var View      = require('famous/core/View');
 
   // Class Constructor
 
   function MenuBar() {
     View.call(this);
-    this._left = new Surface({
+    this._left  = _createBack();
+    this._right = _createBurger();
+    this._mod   = new Modifier();
+
+    _init(this);
+  }
+
+  MenuBar.prototype             = Object.create(View.prototype);
+  MenuBar.prototype.constructor = MenuBar;
+
+  // Helpers
+
+  function _init(menuBar) {
+
+    var mod = menuBar.add(menuBar._mod);
+
+    mod.add(new Modifier({
+      transform: Transform.translate(15, 0, 0),
+      origin: [0, 0.5]
+    })).add(menuBar._left);
+
+    mod.add(new Modifier({
+      transform : Transform.translate(-15, 0, 0),
+      origin    : [1, 0.5]
+    })).add(menuBar._right);
+    
+  }
+
+  function _createBack() {
+    return new Surface({
       size       : [100, 30],
       content    : '<i class="icon-back"></i>',
       properties : {
@@ -16,7 +45,10 @@ define(function(require) {
         color    : 'grey'
       }
     });
-    this._right = new Surface({
+  }
+
+  function _createBurger() {
+    return new Surface({
       size       : [100, 30],
       content    : '<i class="icon-burger"></i>',
       properties : {
@@ -25,26 +57,13 @@ define(function(require) {
         color     : 'grey'
       }
     });
-    this._mod = new StateModifier();
-    var mod   = this.add(this._mod);
-    mod.add(new StateModifier({
-      transform: Transform.translate(15, 0, 0),
-      origin: [0, 0.5]
-    })).add(this._left);
-    mod.add(new StateModifier({
-      transform : Transform.translate(-15, 0, 0),
-      origin    : [1, 0.5]
-    })).add(this._right);
   }
-
-  MenuBar.prototype             = Object.create(View.prototype);
-  MenuBar.prototype.constructor = MenuBar;
 
   // Prototypal Methods
 
-  MenuBar.prototype.setState = function(s) {
+  MenuBar.prototype.setState = function(state) {
     // TODO finish this:
-    switch(s) {
+    switch(state) {
       case 0:
         this._left.setContent('');
         this._right.setContent('');

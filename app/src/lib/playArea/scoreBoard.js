@@ -16,11 +16,8 @@ define(function(require) {
     this._currentPlayer = 1;
     this.position       = 'home';
     this._indicator     = createIndicator();
-    this._spring        = {
-      method       : 'spring',
-      period       : 200,
-      dampingRatio : 0.3
-    };
+
+    _createSpring(this);
     _createPlayers.apply(this, arguments);
     _applyTransitionables(this);
     _applyMods(this);
@@ -48,6 +45,14 @@ define(function(require) {
     scoreBoard.add(scoreBoard._modH).add(scoreBoard._home);
     scoreBoard.add(scoreBoard._modA).add(scoreBoard._away);
     scoreBoard.add(scoreBoard._modI).add(scoreBoard._indicator);
+  }
+
+  function _createSpring(scoreBoard) {
+    scoreBoard._spring = {
+      method       : 'spring',
+      period       : 200,
+      dampingRatio : 0.3
+    };
   }
 
   function createIndicator() {

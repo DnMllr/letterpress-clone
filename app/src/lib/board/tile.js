@@ -12,21 +12,18 @@ define(function(require) {
 
   function Tile(letter, index) {
     View.call(this);
-    this.letter   = letter;
-    this.color    = 0;
-    this._parity  = index % 2;
-    this.x        = index % 5;
-    this.y        = Math.floor(index / 5);
-    this._surface = createSurface(letter);
-    this._wiggler = new Transitionable(0);
-    this._pos     = [new Transitionable(0), new Transitionable(0)];
-    this._width   = new Transitionable(window.innerWidth / 5);
-    this._turn    = new Modifier({
-      origin: [0.5, 0.5]
-    });
-    this._position = new Modifier({
-      origin: [0.5, 0.5]
-    });
+    this.letter    = letter;
+    this.color     = 0;
+    this._parity   = index % 2;
+    this.x         = index % 5;
+    this.y         = Math.floor(index / 5);
+    this._surface  = _createSurface(letter);
+    this._wiggler  = new Transitionable(0);
+    this._pos      = [new Transitionable(0), new Transitionable(0)];
+    this._width    = new Transitionable(window.innerWidth / 5);
+    this._turn     = _createMod()
+    this._position = _createMod()
+
     _init(this);
   }
 
@@ -50,7 +47,7 @@ define(function(require) {
     tile.add(tile._position).add(tile._turn).add(tile._surface);
   }
 
-  function createSurface(letter) {
+  function _createSurface(letter) {
     return new Surface({
       content : '<p>' + letter + '</p>',
       classes : ['tile'],
@@ -61,16 +58,22 @@ define(function(require) {
     });
   }
 
+  function _createMod() {
+    return new Modifier({
+      origin: [0.5, 0.5]
+    });
+  }
+
   // Prototypal Methods
 
   Tile.prototype.getColor = function() {
     return this.color;
   };
 
-  Tile.prototype.setColor = function(c) {
+  Tile.prototype.setColor = function(color) {
     var properties = this._surface.getProperties();
-    this.color = c;
-    switch (c) {
+    this.color = color;
+    switch (color) {
       case 2:
         if (properties.backgroundColor !== 'rgb(0, 177, 253)')
           this._surface.setProperties({ backgroundColor: 'rgb(0, 177, 253)'}); break;

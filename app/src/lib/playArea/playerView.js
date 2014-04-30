@@ -13,16 +13,12 @@ define(function(require) {
   function PlayerView(avatarUrl, index) {
     View.call(this);
     this._parity = index % 2;
-    this.player = new Avatar(avatarUrl, index);
-    this.score  = createRandScore();
-    this._ghost = new Transitionable(1);
-    this._modP  = new Modifier({
-      origin: [0.5, 0]
-    });
-    this._modS = new Modifier({
-      origin: [0.5, 0],
-      transform: Transform.translate(0, 70)
-    });
+    this.player  = new Avatar(avatarUrl, index);
+    this.score   = _createRandScore();
+    this._ghost  = new Transitionable(1);
+    this._modP   = _createMod('p');
+    this._modS   = _createMod('s');
+    
     _init(this);
   }
 
@@ -39,7 +35,7 @@ define(function(require) {
     });
   }
 
-  function createRandScore() {
+  function _createRandScore() {
     return new Surface({
       size       : [75, 30],
       content    : Math.floor(Math.random() * 25) + '',
@@ -51,6 +47,18 @@ define(function(require) {
         color      : 'grey'
       }
     });
+  }
+
+  function _createMod(type) {
+    switch (type) {
+      case 's': return new Modifier({
+          origin: [0.5, 0],
+          transform: Transform.translate(0, 70)
+        });
+      case 'p': return new Modifier({
+          origin: [0.5, 0]
+        });
+    }
   }
 
   // Prototypal Methods

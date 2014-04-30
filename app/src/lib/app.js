@@ -7,7 +7,7 @@ define(function(require) {
   function App() {
     View.call(this);
     this.modalController = new modalController();
-    this.games     = [];
+    this.games           = [];
     this.add(this.modalController);
   }
 

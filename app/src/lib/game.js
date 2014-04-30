@@ -14,41 +14,19 @@ define(function(require) {
 
   function Game() {
     View.call(this);
-    this._size    = new Modifier({
-      size: [100, 100]
-    });
+    this._size    = _createSize();
+    this._layout  = _createLayout();
     this.IO       = new EventHandler();
     this._sizer   = new Transitionable(1);
     this.board    = new Board();
     this.menu     = new TitleBar();
     this.playArea = new ScoreBoard('styles/img/guy1.jpg', 'styles/img/guy2.jpg');
-    this._layout  = createLayout();
     _init(this);
     _wireEvents(this);
   }
 
   Game.prototype             = Object.create(View.prototype);
   Game.prototype.constructor = Game;
-
-  // This isn't going to work most likely
-
-  Game.prototype.toThumb = function() {
-    this.board.hideAllLetters();
-    this._sizer.set(0, {curve: Easing.outQuad, duration: 500});
-    this._layout.setOptions({
-      headerSize: 0,
-      footerSize: 100
-    });
-  };
-
-  Game.prototype.toFull = function() {
-    this.board.showAllLetters();
-    this._sizer.set(1, {curve: Easing.outQuad, duration: 500});
-    this._layout.setOptions({
-      headerSize: 50,
-      footerSize: window.innerWidth
-    });
-  };
 
   // Helpers
 
@@ -73,13 +51,39 @@ define(function(require) {
     });
   }
 
-  function createLayout() {
+  function _createLayout() {
     return new HeaderFooterLayout({
       direction  : HeaderFooterLayout.DIRECTION_Y,
       headerSize : 50,
       footerSize : window.innerWidth
     });
   }
+
+  function _createSize() {
+    return new Modifier({
+      size: [100, 100]
+    });
+  }
+
+  // This isn't going to work most likely
+
+  Game.prototype.toThumb = function() {
+    this.board.hideAllLetters();
+    this._sizer.set(0, {curve: Easing.outQuad, duration: 500});
+    this._layout.setOptions({
+      headerSize: 0,
+      footerSize: 100
+    });
+  };
+
+  Game.prototype.toFull = function() {
+    this.board.showAllLetters();
+    this._sizer.set(1, {curve: Easing.outQuad, duration: 500});
+    this._layout.setOptions({
+      headerSize: 50,
+      footerSize: window.innerWidth
+    });
+  };
 
   return Game;
 

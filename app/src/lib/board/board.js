@@ -10,17 +10,10 @@ define(function(require) {
 
   function Board() {
     View.call(this);
-    this._layout = new GridLayout({
-      dimensions: [5,5]
-    });
-    this._background = new Surface({
-      properties: {
-        background : 'rgb(235, 234, 232)',
-        zIndex     : -1
-      }
-    });
+    this._layout     = new GridLayout({ dimensions: [5,5] });
     this.wordBuilder = new WordBuilder();
-    this.tiles = [];
+    this._background = _createBackground();
+    this.tiles       = [];
 
     _init(this);
   }
@@ -30,33 +23,38 @@ define(function(require) {
 
   // Helpers
 
+  function _createBackground() {
+    return new Surface({
+      properties: {
+        background : 'rgb(235, 234, 232)',
+        zIndex     : -1
+      }
+    });
+  }
+
   function _getRandomChar() {
     var type  = Math.random() > 0.6 ? 'vowels' : 'consonants';
     var index = Math.floor(Chars[type].length * Math.random());
     return Chars[type][index];
   }
 
-  function _populate(b) {
-    b.tiles = [];
-    for (var i = 0 ; i < 25 ; i++) b.tiles.push(new Tile(_getRandomChar(), i));
-    b.tiles.forEach(function(tile) {
+  function _populate(board) {
+    board.tiles = [];
+    for (var i = 0 ; i < 25 ; i++) board.tiles.push(new Tile(_getRandomChar(), i));
+    board.tiles.forEach(function(tile) {
       tile._eventInput.on('click', function() {
-        var index = b.wordBuilder.indexOf(tile);
-        if (index !== -1) b.wordBuilder.remove(index);
-        else b.wordBuilder.push(tile);
+        var index = board.wordBuilder.indexOf(tile);
+        if (index !== -1) board.wordBuilder.remove(index);
+        else board.wordBuilder.push(tile);
       });
     });
-    b._layout.sequenceFrom(b.tiles);
+    board._layout.sequenceFrom(board.tiles);
   }
 
-  function _init(b) {
-    b.add(b._layout);
-    b.add(b._background);
-    _populate(b);
-  }
-
-  function _createBlankTile(index) {
-    return new Tile('', index);
+  function _init(board) {
+    board.add(board._layout);
+    board.add(board._background);
+    _populate(board);
   }
 
   function typeCheck(obj) {
@@ -69,19 +67,19 @@ define(function(require) {
     return this.tiles[y * 5 + x];
   };
 
-  Board.prototype.tilesByColor = function(c) {
+  Board.prototype.tilesByColor = function(colors) {
     var color;
-    return this.tiles.filter(typeCheck(c) === 'Array' ? function(tile) {
+    return this.tiles.filter(typeCheck(colors) === 'Array' ? function(tile) {
       color = tile.getColor();
-      for (var i = 0 ; i < c.length ; i++) if (color === c[i]) return true;
+      for (var i = 0 ; i < colors.length ; i++) if (color === colors[i]) return true;
       return false;
     } : function(tile) {
-      return tile.getColor() === c;
+      return tile.getColor() === colors;
     });
   };
 
-  Board.prototype.wiggleByColor = function(c) {
-    this.tilesByColor(c).forEach(function(tile) {
+  Board.prototype.wiggleByColor = function(color) {
+    this.tilesByColor(color).forEach(function(tile) {
       tile.wiggle();
     });
   };

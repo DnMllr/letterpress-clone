@@ -15,10 +15,9 @@ define(function(require) {
     this.message  = message;
     this.buttons  = buttons;
     this._turner  = new Transitionable(0);
-    this._surface = createSurface(heading, message, buttons);
-    this._mod     = new Modifier({
-      origin: [0.5, 0.5]
-    });
+    this._surface = _createSurface(heading, message, buttons);
+    this._mod     = _createMod();
+
     _init(this);
   }
 
@@ -43,7 +42,7 @@ define(function(require) {
     message.add(message._mod).add(message._surface);
   }
 
-  function createSurface(heading, message, buttons) {
+  function _createSurface(heading, message, buttons) {
     return new Surface({
       content    : (heading !== '' ?  '<div class="modal heading">' + heading + '</div>' : '')
         + '<div class="modal message">' + message + '</div>' + generateButtons(buttons),
@@ -55,6 +54,12 @@ define(function(require) {
         backgroundColor : 'white',
         zIndex          : 2
       }
+    });
+  }
+
+  function _createMod() {
+    return new Modifier({
+      origin: [0.5, 0.5]
     });
   }
 
