@@ -18,6 +18,18 @@ define(function(require) {
     this.games.push(new Game());
   };
 
+  App.prototype.build = function(animation) {
+    animation.build(this);
+  }
+
+  App.prototype.run = function(animation) {
+    animation.run(this);
+  };
+
+  App.prototype.teardown = function(animation) {
+    animation.teardown(this);
+  };
+
   return App;
 
 });
