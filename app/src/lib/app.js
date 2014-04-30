@@ -1,12 +1,12 @@
 define(function(require) {
 
   var View            = require('famous/core/View');
-  var modalController = require('./modals/modalController');
+  var ModalController = require('./modals/modalController');
   var Game            = require('./game');
 
   function App() {
     View.call(this);
-    this.modalController = new modalController();
+    this.modalController = new ModalController();
     this.games           = [];
     this.add(this.modalController);
   }

@@ -21,8 +21,8 @@ define(function(require) {
     this._wiggler  = new Transitionable(0);
     this._pos      = [new Transitionable(0), new Transitionable(0)];
     this._width    = new Transitionable(window.innerWidth / 5);
-    this._turn     = _createMod()
-    this._position = _createMod()
+    this._turn     = _createMod();
+    this._position = _createMod();
 
     _init(this);
   }

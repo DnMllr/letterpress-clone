@@ -46,7 +46,7 @@ define(function(require) {
     }
   }
 
-  function _createMod(type) {
+  function _createMod() {
     return new Modifier({
       origin: [0.5, 0.5]
     });
@@ -61,7 +61,7 @@ define(function(require) {
     });
     spinner.add(spinner._backMod).add(spinner._background);
     spinner.add(spinner._contMod).add(spinner._content);
-  };
+  }
 
   Spinner.prototype             = Object.create(View.prototype);
   Spinner.prototype.constructor = Spinner;

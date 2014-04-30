@@ -18,7 +18,7 @@ define(function(require) {
     this._ghost  = new Transitionable(1);
     this._modP   = _createMod('p');
     this._modS   = _createMod('s');
-    
+
     _init(this);
   }
 

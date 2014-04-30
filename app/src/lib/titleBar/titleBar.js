@@ -33,7 +33,7 @@ define(function(require) {
       transform : Transform.translate(-15, 0, 0),
       origin    : [1, 0.5]
     })).add(menuBar._right);
-    
+
   }
 
   function _createBack() {
