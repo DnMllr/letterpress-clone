@@ -57,6 +57,10 @@ define(function(require) {
       this.nextTurn();
     }.bind(this));
 
+    this.menu.on('cancel', function() {
+      this.board.wordBuilder.removeAll()
+    }.bind(this));
+
     this.IO.on('WB activated', function() {
       this.playArea.overlap();
       this.menu.show(2);

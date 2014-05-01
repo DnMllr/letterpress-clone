@@ -38,6 +38,10 @@ define(function(require) {
     this._right.on('click', function() {
       if (this._state === 2) this._eventOutput.emit('submit');
     }.bind(this));
+
+    this._left.on('click', function() {
+      if (this._state === 2) this._eventOutput.emit('cancel');
+    }.bind(this));
   }
 
   function _createScene() {

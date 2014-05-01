@@ -46,6 +46,9 @@ define(function(require) {
     this.bars[2].on('submit', function() {
       this._eventOutput.emit('submit');
     }.bind(this));
+    this.bars[2].on('cancel', function() {
+      this._eventOutput.emit('cancel');
+    }.bind(this));
   }
 
   function _createScene() {
