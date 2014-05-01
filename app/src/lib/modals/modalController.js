@@ -23,15 +23,9 @@ define(function(require) {
 
   // Helpers
 
-  function _init(ModalController) {
-    [
-
-      _createMessages,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(ModalController);
-    });
+  function _init(modalController) {
+    _createMessages.apply(modalController);
+    _createScene.apply(modalController);
   }
 
   function _createMessages() {

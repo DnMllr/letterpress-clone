@@ -19,14 +19,8 @@ define(function(require) {
   // Helpers
 
   function _init(app) {
-    [
-
-      _bindEvents,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(app);
-    });
+    _bindEvents.apply(app);
+    _createScene.apply(app);
   }
 
   function _bindEvents() {

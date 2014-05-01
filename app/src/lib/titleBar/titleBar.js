@@ -18,15 +18,9 @@ define(function(require) {
   // Helpers
 
   function _init(menuBar) {
-    [
-
-      _applySurfaces,
-      _wireEvents,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(menuBar);
-    });
+    _applySurfaces.apply(menuBar);
+    _wireEvents.apply(menuBar);
+    _createScene.apply(menuBar);
   }
 
   function _applySurfaces() {

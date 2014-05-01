@@ -24,14 +24,8 @@ define(function(require) {
   // Helpers
 
   function _init(board) {
-    [
-
-      _createScene,
-      _populate
-
-    ].forEach(function(step) {
-      step.apply(board);
-    });
+    _createScene.apply(board);
+    _populate.apply(board);
   }
 
   function _createScene() {

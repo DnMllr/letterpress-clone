@@ -33,15 +33,9 @@ define(function(require) {
   // Helpers
 
   function _init(game) {
-    [
-
-      _wireTransitionables,
-      _wireEvents,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(game);
-    });
+    _wireTransitionables.apply(game);
+    _wireEvents.apply(game);
+    _createScene.apply(game);
   }
 
   function _wireTransitionables() {

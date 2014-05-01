@@ -17,7 +17,7 @@ define(function(require) {
     this._turner  = new Transitionable(0);
     this._mod     = _createMod();
 
-    _init(this, arguments);
+    _init(this);
   }
 
   Message.prototype             = Object.create(View.prototype);
@@ -34,16 +34,10 @@ define(function(require) {
     return html;
   }
 
-  function _init(Message, args) {
-    [
-
-      _applySurface,
-      _wireTransitionables,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(Message, args);
-    });
+  function _init(message) {
+    _applySurface.apply(message);
+    _wireTransitionables.apply(message)
+    _createScene.apply(message);
   }
 
   function _applySurface() {

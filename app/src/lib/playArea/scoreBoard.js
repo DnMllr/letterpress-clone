@@ -26,18 +26,12 @@ define(function(require) {
   //Helpers
 
   function _init(scoreBoard, args) {
-    [
-
-      _createSpring,
-      _createPlayers,
-      _applyTransitionables,
-      _applyMods,
-      _wireTransitionables,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(scoreBoard, args);
-    });
+    _createSpring.apply(scoreBoard);
+    _createPlayers.apply(scoreBoard);
+    _applyTransitionables.apply(scoreBoard);
+    _applyMods.apply(scoreBoard);
+    _wireTransitionables.apply(scoreBoard);
+    _createScene.apply(scoreBoard);
   }
 
   function _createSpring() {

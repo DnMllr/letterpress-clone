@@ -22,15 +22,9 @@ define(function(require) {
   // Helpers
 
   function _init(titleController) {
-    [
-
-      _createTitleBars,
-      _wireEvents,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(titleController);
-    });
+    _createTitleBars.apply(titleController);
+    _wireEvents.apply(titleController);
+    _createScene.apply(titleController);
   }
 
   function _createTitleBars() {

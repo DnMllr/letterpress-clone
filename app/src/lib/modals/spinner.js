@@ -19,17 +19,11 @@ define(function(require) {
   // Helpers
 
   function _init(spinner) {
-    [
-
-      _createSurfaces,
-      _applyTransitionables,
-      _applyMods,
-      _wireTransitionables,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(spinner);
-    });
+    _createSurfaces.apply(spinner);
+    _applyTransitionables.apply(spinner);
+    _applyMods.apply(spinner);
+    _wireTransitionables.apply(spinner);
+    _createScene.apply(spinner);
   }
 
   function _createSurfaces() {

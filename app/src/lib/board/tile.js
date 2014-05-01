@@ -26,18 +26,12 @@ define(function(require) {
   //Helpers
 
   function _init(tile, args) {
-    [
-
-      _applyIndex,
-      _applyTransitionables,
-      _applyMods,
-      _wireTransitionables,
-      _wireEvents,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(tile, args);
-    });
+    _applyIndex.apply(tile, args)
+    _applyTransitionables.apply(tile)
+    _applyMods.apply(tile)
+    _wireTransitionables.apply(tile)
+    _wireEvents.apply(tile)
+    _createScene.apply(tile)
   }
 
   function _applyIndex(letter, index) {

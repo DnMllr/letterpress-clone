@@ -36,15 +36,9 @@ define(function(require) {
   // Prototypal Methods
 
   WordBuilder.prototype._refresh = function() {
-    [
-
-      _calculateTileWidth,
-      _applyTileWidth,
-      _reflow
-
-    ].forEach(function(step) {
-      step.apply(this);
-    }.bind(this));
+    _calculateTileWidth.apply(this);
+    _applyTileWidth.apply(this);
+    _reflow.apply(this);
   };
 
   WordBuilder.prototype.push = function(tile) {

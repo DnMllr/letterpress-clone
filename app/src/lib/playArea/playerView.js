@@ -26,15 +26,9 @@ define(function(require) {
   // Helpers
 
   function _init(playerView) {
-    [
-
-      _createMods,
-      _wireTransitionables,
-      _createScene
-
-    ].forEach(function(step) {
-      step.apply(playerView);
-    });
+    _createMods.apply(playerView);
+    _wireTransitionables.apply(playerView);
+    _createScene.apply(playerView);
   }
 
   function _createMods() {
