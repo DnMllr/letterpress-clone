@@ -27,7 +27,7 @@ define(function(require) {
 
   function _init(scoreBoard, args) {
     _createSpring.apply(scoreBoard);
-    _createPlayers.apply(scoreBoard);
+    _createPlayers.apply(scoreBoard, args);
     _applyTransitionables.apply(scoreBoard);
     _applyMods.apply(scoreBoard);
     _wireTransitionables.apply(scoreBoard);
