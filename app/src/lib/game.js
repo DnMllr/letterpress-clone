@@ -110,10 +110,10 @@ define(function(require) {
   };
 
   Game.prototype.nextTurn = function() {
-    this.currentPlayer = this.currentPlayer % 2; 
-    this.currentPlayer++
+    this.currentPlayer = this.currentPlayer % 2;
+    this.currentPlayer++;
     this.playArea.setPlayer(this.currentPlayer);
-  }
+  };
 
   return Game;
 

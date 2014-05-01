@@ -89,7 +89,7 @@ define(function(require) {
   function findSurrounded(grid) {
     var surrounded = {};
     grid.forEach(function(row, y) {
-      if (row.length) 
+      if (row.length)
         row.forEach(function(tile, x) {
           if (tile) {
             var xs = [];

@@ -61,6 +61,7 @@ html {
   text-align: center;
 }
 
+.submit-pill:active,
 .submit-pill.clicked {
   background: rgb(0, 150, 230);
 }

@@ -37,18 +37,18 @@ define(function(require) {
   function _wireEvents() {
     this._right.on('click', function() {
       if (this._state === 2) this._eventOutput.emit('submit');
-    }.bind(this))
+    }.bind(this));
   }
 
   function _createScene() {
 
     this.add(new Modifier({
-      transform: Transform.translate(15, 0, 0),
+      transform: Transform.translate(7, 0, 0),
       origin: [0, 0.5]
     })).add(this._left);
 
     this.add(new Modifier({
-      transform : Transform.translate(-15, 0, 0),
+      transform : Transform.translate(-7, 0, 0),
       origin    : [1, 0.5]
     })).add(this._right);
 

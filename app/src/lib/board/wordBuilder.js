@@ -66,7 +66,6 @@ define(function(require) {
   WordBuilder.prototype.removeAll = function() {
     while (this.tiles.length) this.remove(0);
     this._refresh();
-    if (!this.tiles.length) this.IO.emit('WB deactivated');
     return this;
   };
 
