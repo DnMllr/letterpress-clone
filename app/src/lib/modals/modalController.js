@@ -79,11 +79,13 @@ define(function(require) {
     if (this.messages[this.shown]) this.messages[this.shown].modal.turn();
     if (this.messages[key].dark)
       this.background.setProperties({
-        background: 'rgba(0, 0, 0, 0.4)'
+        background: 'rgba(0, 0, 0, 0.4)',
+        pointerEvents: 'auto'
       });
     else if (this.messages[this.shown] && this.messages[this.shown].dark)
       this.background.setProperties({
-        background: 'rgba(0, 0, 0, 0)'
+        background: 'rgba(0, 0, 0, 0)',
+        pointerEvents: 'none'
       });
     this.shown = key;
   };

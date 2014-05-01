@@ -13,11 +13,9 @@ define(function(require) {
   }
 
   function clearColors(animation, app) {
-    for (var i = 0 ; i < 5 ; i++) {
-      for (var j = 0 ; j < 5 ; j++) {
+    for (var i = 0 ; i < 5 ; i++)
+      for (var j = 0 ; j < 5 ; j++)
         app.games[0].board.tileByPosition(i, j).setColor(0);
-      }
-    }
   }
 
   //Animations

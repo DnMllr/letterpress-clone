@@ -23,7 +23,7 @@ define(function(require) {
   window.app       = app;
   window.animation = animation;
 
-  console.log('Hello, to play animations, first build the animation by calling \"app.build(animation[index]);\". \n'
+  window.console.log('Hello, to play animations, first build the animation by calling \"app.build(animation[index]);\". \n'
     + 'Then run the animation by calling \"app.run(animation[index]);\". \n'
     + 'To clear the animation call \"app.teardown(animation[index]);\" with the index of the animation you wish to clear. \n'
     + 'Valid indexes of animations are 1 and 2.');

@@ -36,7 +36,7 @@ define(function(require) {
 
   function _init(message) {
     _applySurface.apply(message);
-    _wireTransitionables.apply(message)
+    _wireTransitionables.apply(message);
     _createScene.apply(message);
   }
 
