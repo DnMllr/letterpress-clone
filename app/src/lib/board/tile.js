@@ -159,8 +159,8 @@ define(function(require) {
   Tile.prototype.goTo = function(x, y, options) {
     options = options || {
       method: 'spring',
-      period: 500,
-      dampingRatio: 0.7
+      period: 300,
+      dampingRatio: 0.5
     };
     this.halt();
     this._pos[0].set(x, options);
