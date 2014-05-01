@@ -1,14 +1,15 @@
 define(function(require) {
 
-  var Board              = require('./board/board');
-  var TitleController    = require('./titleBar/titleController');
-  var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
   var Modifier           = require('famous/core/Modifier');
   var View               = require('famous/core/View');
-  var ScoreBoard         = require('./playArea/scoreBoard');
+  var EventHandler       = require('famous/core/EventHandler');
+  var HeaderFooterLayout = require('famous/views/HeaderFooterLayout');
   var Transitionable     = require('famous/transitions/Transitionable');
   var Easing             = require('famous/transitions/Easing');
-  var EventHandler       = require('famous/core/EventHandler');
+  var Board              = require('./board/board');
+  var TitleController    = require('./titleBar/titleController');
+  var wait               = require('./wait');
+  var ScoreBoard         = require('./playArea/scoreBoard');
 
   // Class Constructor
 
@@ -50,23 +51,27 @@ define(function(require) {
   }
 
   function _wireEvents() {
-    this.IO.subscribe(this.board.wordBuilder.IO);
+    this.subscribe(this.board.wordBuilder.IO);
+    this.subscribe(this.menu);
 
-    this.menu.on('submit', function() {
-      this.board.acceptWord(this.currentPlayer === 1 ? 1 : -1);
-      this.nextTurn();
+    this._eventInput.on('submit', function() {
+      this._eventOutput.emit('submit');
+      wait(2100).then(function() {
+        this.board.acceptWord(this.currentPlayer === 1 ? 1 : -1);
+        this.nextTurn();
+      }.bind(this));
     }.bind(this));
 
-    this.menu.on('cancel', function() {
-      this.board.wordBuilder.removeAll()
+    this._eventInput.on('cancel', function() {
+      this.board.wordBuilder.removeAll();
     }.bind(this));
 
-    this.IO.on('WB activated', function() {
+    this._eventInput.on('WB activated', function() {
       this.playArea.overlap();
       this.menu.show(2);
     }.bind(this));
 
-    this.IO.on('WB deactivated', function() {
+    this._eventInput.on('WB deactivated', function() {
       this.playArea.home();
       this.menu.show(1);
     }.bind(this));

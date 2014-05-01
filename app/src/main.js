@@ -20,10 +20,12 @@ define(function(require) {
   node.add(app.games[0]);
   node.add(app.modalController);
 
-  app.build(animation[1]);
-  app.run(animation[1]);
-
   window.app       = app;
   window.animation = animation;
+
+  console.log('Hello, to play animations build the animation first by calling \"app.build(animation[index]);\" \n'
+    + 'then run the animation by calling \"app.run(animation[index]);\". \n'
+    + 'to clear the animation call \"app.teardown(animation[index]);\" with the index of the animation you wish to clear. \n'
+    + 'valid indexes of animations are 1 and 2.');
 
 });

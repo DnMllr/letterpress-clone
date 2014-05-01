@@ -69,10 +69,16 @@ define(function(require) {
 
   TitleController.prototype.show = function(index) {
     this.lightbox.show(this.bars[index]);
+    this.shown = index;
+  };
+
+  TitleController.prototype.getShown = function() {
+    return this.bars[this.shown];
   };
 
   TitleController.prototype.hide = function() {
     this.lightbox.hide();
+    this.shown = 0;
   };
 
   return TitleController;
