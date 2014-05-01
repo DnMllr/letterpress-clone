@@ -27,7 +27,7 @@ define(function(require) {
     this.tiles.forEach(function(tile, i, tiles) {
       tile.halt();
       pos    = tile.getPos();
-      offset = i * this.tileWidth - pos[0] * window.innerWidth / 5;
+      offset = i * this.tileWidth - pos[0] * window.innerWidth / 5 - (window.innerWidth / 5 - this.tileWidth) / 2;
       center = (window.innerWidth - tiles.length * this.tileWidth) / 2;
       tile.goTo(offset + center, -100 - (pos[1] * window.innerWidth / 5));
     }.bind(this));

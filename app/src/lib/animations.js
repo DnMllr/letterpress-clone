@@ -13,10 +13,10 @@ define(function(require) {
   }
 
   function clearColors(animation, app) {
-    for (var color in animation.colors) {
-      animation.colors[color].forEach(function(pair) {
-        app.games[0].board.tileByPosition.apply(app.games[0].board, pair).setColor(0);
-      });
+    for (var i = 0 ; i < 5 ; i++) {
+      for (var j = 0 ; j < 5 ; j++) {
+        app.games[0].board.tileByPosition(i, j).setColor(0);
+      }
     }
   }
 
