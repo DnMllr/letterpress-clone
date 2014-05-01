@@ -20,6 +20,9 @@ with the index of the animation you wish to clear.
 Valid indexes of animations are 1 and 2.
 
 ##Dependencies
+
+*note*, the runtime environment needs to have a Promise constructor in the global scope. Chrome is the only browser this was tested in.
+
 It is actually quite simple really
 
 First make sure you have node.js, grunt-cli, and bower installed.
