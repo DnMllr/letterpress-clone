@@ -79,7 +79,7 @@ define(function(require) {
 
   MenuBar.prototype.setState = function(state) {
     // TODO finish this:
-    switch(state) {
+    switch (state) {
       case 0:
         this._left.setContent('');
         this._right.setContent('');
